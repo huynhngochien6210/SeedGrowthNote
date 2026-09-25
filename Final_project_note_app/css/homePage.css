@@ -1,0 +1,701 @@
+/*==== HIỀN ====*/
+
+/* header */
+.app-header{
+    background-color: #f9f5ea;
+    border-radius: 20px 20px 0 0;
+}
+/* logo */
+.logo-text{
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: #254f22;
+}
+/* Search box */
+.search-box .input-group{
+    border: 2px solid black;
+    border-radius: 50px;
+    overflow: hidden;
+    max-width: 500px;
+}
+.search-icon-box{
+    color: #8ce41d;
+    background: transparent;
+}
+.search-input{
+    background: transparent;
+}
+.search-box:focus{
+    box-shadow: none;
+    background: transparent;
+}
+/* View toggle group */
+.view-toggle-group-btn{
+    width: 42px;
+    height: 42px;
+    background: transparent;
+    color: #254f22;
+    transition: background 0.2s ease, color 0.2s ease;
+    border: none;
+}
+/* Icon button */
+.icon-btn{
+    width: 42px;
+    height: 42px;
+    background: #8bccaa;  
+    color:#254f22;
+    border: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.view-toggle-group-btn.active{
+    background: #8bccaa;
+}
+.view-toggle-btn:hover:not(.active) {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* Main= sidebar + content */
+.app-main{
+    position: relative;
+    background-image: url('/image/background.jpeg');
+    background-size: cover ;
+    background-position: center;
+    min-height: calc(100vh - 90px);
+    overflow: hidden;
+}
+/* Sidebar */
+.app-sidebar{
+    height: 90%;
+    background-color: rgba(26, 58, 26, 0.75);
+    backdrop-filter: blur(2px);
+    flex: 0 0 90px;
+    margin: 40px 10px 30px 0;
+    border-radius: 10px;
+
+}
+.sidebar-icon-item{
+    color: whitesmoke;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+.sidebar-icon-item:hover{
+    color: #fff;
+}
+
+/* Note board */
+.note-board-grid{
+    gap: 30px 50px;
+}
+.note-board{
+    width: 100%;
+    margin: 40px;
+    box-sizing: border-box;
+    background-color: #efe9da;
+    border-radius: 30px;
+    padding: 30px;
+    flex: 1;
+    overflow: hidden;
+}
+.new-note-card{
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+}
+.new-note-card,.note-card, .note-card-link{
+    width: 96px;
+    flex-direction: column;
+    text-decoration: none;
+}
+.new-note-circle{
+    width: 100px;
+    height: 100px;   
+    border: 2px solid black;
+    background-color: #ffff;  
+    position: relative;  
+}
+.note-icon-badge{
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    transform: translate(90%, -70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.new-note-label{
+    position: fixed;
+    font-size: 20px;
+    font-weight: 600;
+    color: black;
+}
+.note-card-icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.note-card-icon svg{
+    width: 100%;
+    height: 100%;
+}
+.note-card-icon.is-clickable{
+    cursor: pointer;
+}
+.color-popover{
+    position: absolute;
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    background: #fff;
+    border-radius: 999px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.18);
+    z-index: 20;
+}
+.color-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  outline: 1px solid rgba(0,0,0,.1);
+  cursor: pointer;
+  padding: 0;
+}
+.color-swatch:hover {
+  outline: 2px solid #1f2417;
+}
+/* Menu note */
+.note-menu-btn{
+    position: relative;
+    transform: translate(45%, -55%);
+    border: none;
+    background: transparent;
+    padding: 2px 4px;
+    cursor: pointer;
+    color: black;
+}
+.note-dropdown-menu {
+    position: fixed;
+    top: 100%;
+    left: 0;
+    margin-top: 6px;
+    background: #fff;
+    border: 3px solid #254f22;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.15);
+    min-width: 120px;
+    z-index: 30;
+    overflow: hidden;
+    transform: translateY(-30%);
+    transform-origin: bottom left;  
+}
+.note-dropdown-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: transparent;
+    text-align: left;
+    font-size: .9rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    color: #276623;
+    border-bottom: 2px solid #eee;
+}
+.note-dropdown-item:last-child {
+    border-bottom: none;
+}
+.note-dropdown-item:hover {
+    background: #f5f3ec;
+}
+/* Verify email toast */
+.verify-toast{
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    max-width: 260px;
+    background: #dc4f13;
+    border-radius: 20px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    z-index: 1050;
+}
+.btn-verify{
+    background-color: #ffff;
+    color:#817908;
+    border-bottom: 5px solid rgb(41, 40, 40);
+    font-weight: 600;
+    margin-left: 25px;
+}
+.btn-verify:hover{
+    background-color: lightgrey;
+    border-bottom: 5px solid rgb(41, 40, 40);
+
+}
+.bi-envelope-check{
+    color: #50d517;
+}
+.small{
+    font-weight: bold;
+}
+
+/* DARK MODE */
+/* Header */
+body.dark-mode .app-header {
+  background-color: #162b20;
+}
+body.dark-mode .logo-text {
+  color: #fdfdfd;
+}
+body.dark-mode .search-box .input-group {
+  border: 2px solid #ffffff;
+  background-color: transparent;
+}
+body.dark-mode .search-icon-box {
+  background: transparent;
+  color: #abf556; 
+}
+body.dark-mode .search-input {
+  background-color: transparent;
+  color: #ffffff;
+}
+body.dark-mode .search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+body.dark-mode .view-toggle-group-btn {
+  color: #ffffff;
+  background-color: #d3ba14;
+}
+body.dark-mode .icon-btn {
+  border: 2px solid #d3ba14;
+  background-color: transparent;
+  color: #ffffff;
+}
+body.dark-mode #themeBtn {
+  background-color: #d3ba14;
+  color: #ffffff;
+}
+body.dark-mode .note-board{
+    background-color:#254f22;
+}
+body.dark-mode .new-note-circle{
+    border-color: lightblue;
+}
+body.dark-mode .note-dropdown-menu{
+    border: 4px solid #c3d7f1;
+}
+body.dark-mode .note-dropdown-item{
+    color: #1f1e1e;
+}
+
+/* Responsive on mobile */
+@media(max-width: 767.98px){
+    .view-toggle-group-btn:not(.active){
+        display: none;
+    }
+    .view-toggle-group-btn.active{
+        border-radius: 0.5rem !important;
+    }
+    .app-sidebar{
+        display: none !important;
+    }
+    .app-sidebar.show{
+        display: flex !important;
+    }
+    /* Overlay */
+    .sidebar-overlay{
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+    }
+    .sidebar-overlay.show{
+        display: block;
+    }
+    /* Header can z-index cao hon sidebar de nut menu khong bi de */
+    .app-header{
+        position: relative;
+        z-index: 1060;
+    }
+    /* create note */
+    .note-board-grid{
+        gap: 20px 12px;
+    }
+    .new-note-circle{
+        width: 60px;
+        height: 60px;
+    }
+    .note-icon-badge{
+        width: 50%;
+        height: 50%;
+    }
+    .new-note-label{
+        font-size: 15px;
+    }
+    /* Seed icon */
+    .note-card-icon{
+        width: 56px;
+        height: 68px;
+    }
+    .note-card-title{
+        font-size: 13px;
+        display: block;
+    }
+    .note-card-date{
+        font-size: 13px;;
+    }
+}
+
+
+
+/* TRANG */
+/* ===== Account ===== */
+
+.account-page-wrap{
+    width: 100%;
+}
+
+/* Card bao ngoài, bo góc giống app-header */
+.account-card{
+    background-color: #f9f5ea;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    max-width: 1400px;
+    min-height:600px;
+    margin:auto;
+    
+}
+
+/* Cột trái: avatar + menu, phủ ảnh nền + lớp xanh mờ giống sidebar */
+
+.account-side{
+    background-color: rgba(26, 58, 26, 0.75);
+    backdrop-filter: blur(10px);
+    color: #ffffff;
+    min-width: 450px;
+   
+}
+
+.avatar-circle{
+    position: relative;
+    width: 124px;
+    height: 124px;
+    font-size: 3.8rem;
+    border-radius: 50%;
+    background-color: #ffffff;
+    color: #8bccaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.avatar-edit-btn{
+    position: absolute;
+    right: -2px;
+    bottom: -2px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.8rem;
+    border-radius: 50%;
+    border: none;
+    background-color: #8bccaa;
+    color: #254f22;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+/* Menu dọc bên trái, có đường nối + chấm tròn */
+.account-menu{
+    position: relative;
+    margin-left: 1.25rem;
+    padding-left: 1rem;
+    text-align:left;
+}
+
+.account-menu::before{
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.account-menu-item{
+    position: relative;
+    padding: 12px;   /*sửa lại từ 0.8rem -> 12px*/
+}
+
+.account-menu-dot{
+    position: absolute;
+    left: -1.5rem;  /* sửa lại: -1.2 -> -1.5 cho nó ngay chính giữa đường thẳng*/
+    top: 1.1rem;    /*size dot đc chỉnh to hơn*/
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.account-menu-item.active .account-menu-dot{
+    background-color: #8ce41d;
+}
+
+.account-menu-item a{
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 1.5rem;
+
+}
+
+.account-menu-item.active a{
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.account-menu-item.logout a{
+    color: #ff8a8a;
+}
+
+.account-menu-item a:hover{
+    color: #ffffff;
+}
+
+/* Cột phải: thông tin tài khoản */
+.account-main{
+    background-color: #f9f5ea;
+}
+
+.edit-profile-btn{
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    border: none;
+    border-radius: 999px;
+    padding: 0.4rem 1.1rem;
+    background-color: #254f22;
+    color: #ffffff;
+    font-size: 2.1rem;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.edit-profile-btn:hover{
+    background-color: #8bccaa;
+    color: #254f22;
+}
+
+.account-username{
+    color: #254f22;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+.account-subtitle{
+    color: rgba(37, 79, 34, 0.6);
+    font-size: 2.1rem;
+}
+
+.account-field-label{
+    display: block;
+    color: #254f22;
+    font-size: 2.1rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+}
+
+.account-field-label i{
+    color: #8ce41d;
+    margin-right: 0.35rem;
+
+}
+
+.account-field-input{
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid rgba(37, 79, 34, 0.3);
+    background: transparent;
+    color: #254f22;
+    padding: 0.25rem 0.1rem;
+    font-size: 2.2rem;
+}
+
+.account-field-input:focus{
+    outline: none;
+    border-bottom-color: #254f22;
+}
+
+.account-field-input[readonly]{
+    color: rgba(37, 79, 34, 0.75);
+}
+
+/* ===== Dark mode ===== */
+
+body.dark-mode .account-card{
+    background-color: #162b20;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .account-main{
+    background-color: #162b20;
+}
+
+body.dark-mode .account-username,
+body.dark-mode .account-field-label{
+    color: #ffffff;
+}
+
+body.dark-mode .account-subtitle{
+    color: rgba(255, 255, 255, 0.6);
+}
+
+body.dark-mode .account-field-input{
+    color: #ffffff;
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+}
+
+body.dark-mode .account-field-input:focus{
+    border-bottom-color: #ffffff;
+}
+
+body.dark-mode .edit-profile-btn{
+    background-color: #d3ba14;
+    color: #ffffff;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 767.98px){
+
+    .account-card{
+        border-radius: 20px;
+    }
+
+    .account-side{
+        min-width: 100%;
+    }
+
+    .edit-profile-btn{
+        position: static;
+        margin-bottom: 1rem;
+        display: inline-block;
+    }
+
+}
+
+/* ===== Panel switching (Account, Notes, ...) ===== */
+
+.app-panel{
+    display: none;
+    width: 100%;
+}
+
+.app-panel.active{
+    display: flex;
+}
+
+/* Nút quay lại panel Notes, đặt góc trên-trái của mỗi panel */
+.panel-back-btn{
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    width: 56px;
+    height: 56px;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(37, 79, 34, 0.1);
+    color: #e7efe7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.35rem;
+    transition: background 0.2s ease;
+    z-index: 5;
+}
+
+.panel-back-btn:hover{
+    background-color: rgba(74, 159, 67, 0.2);
+
+}
+
+body.dark-mode .panel-back-btn{
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+body.dark-mode .panel-back-btn:hover{
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ====== Password ====== */
+/* Username hiển thị dưới avatar (dùng ở panel Password) */
+.account-side-username{
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+/* Link "Forgot your password?" */
+.forgot-password-link{
+    color: #254f22;
+    font-size: 0.9rem;
+    text-decoration: underline;
+}
+
+.forgot-password-link:hover{
+    color: #8ce41d;
+}
+
+body.dark-mode .forgot-password-link{
+    color: #ffffff;
+}
+
+body.dark-mode .forgot-password-link:hover{
+    color: #d3ba14;
+}
+
+/* Nút submit dùng lại style edit-profile-btn */
+.edit-profile-btn.position-static{
+    position: static;
+}
+
+/* Wrapper cho ô password + icon con mắt */
+.password-field-wrap{
+    position:relative;
+}
+
+.password-field-wrap .account-field-input{
+    padding-right: 1.8rem; /* chừa chỗ cho icon, tránh đè lên chữ đang gõ */
+}
+
+.password-toggle-btn{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: rgba(8, 8, 8, 0.951);
+    padding: 0;
+    line-height: 1;
+}
+
+.password-toggle-btn:hover{
+    color: #254f22;
+}
+
+body.dark-mode .password-toggle-btn{
+    color: rgba(255, 255, 255, 0.6);
+}
+
+body.dark-mode .password-toggle-btn:hover{
+    color: #ffffff;
+}
