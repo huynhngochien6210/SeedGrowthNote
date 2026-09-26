@@ -14,7 +14,9 @@
         }
     </script>
     <!-- my css -->
+     <link rel="stylesheet" href="css/darkMode&Respon.css">
      <link rel="stylesheet" href="css/homePage.css">
+     <link rel="stylesheet" href="css/verify_email_toast.css">
     <title>Seedgrowthnote</title>
 </head>
 <body>
@@ -25,7 +27,8 @@
         <div class="app-main-inner d-flex w-100 min-vh-100">
             <!-- Import sidebar -->
             <?php include 'components/sidebar.php'; ?>
-             
+            <!-- Import verify_email_toast -->
+             <?php include 'components/verify_email_toast.php'; ?>
         </div>
     </main>
 

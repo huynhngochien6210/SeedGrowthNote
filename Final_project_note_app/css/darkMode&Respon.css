@@ -1,0 +1,84 @@
+/* DARK MODE */
+/* Header */
+body.dark-mode .app-header {
+  background-color: #162b20;
+}
+body.dark-mode .logo-text {
+  color: #fdfdfd;
+}
+body.dark-mode .search-box .input-group {
+  border: 2px solid #ffffff;
+  background-color: transparent;
+}
+body.dark-mode .search-icon-box {
+  background: transparent;
+  color: #abf556; 
+}
+body.dark-mode .search-input {
+  background-color: transparent;
+  color: #ffffff;
+}
+body.dark-mode .search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+body.dark-mode .view-toggle-group-btn {
+  color: #ffffff;
+  background-color: #d3ba14;
+}
+body.dark-mode .icon-btn {
+  border: 2px solid #d3ba14;
+  background-color: transparent;
+  color: #ffffff;
+}
+body.dark-mode #themeBtn {
+  background-color: #d3ba14;
+  color: #ffffff;
+}
+body.dark-mode .note-board{
+    background-color:#254f22;
+}
+body.dark-mode .new-note-circle{
+    border-color: lightblue;
+}
+body.dark-mode .note-dropdown-menu{
+    border: 4px solid #c3d7f1;
+}
+body.dark-mode .note-dropdown-item{
+    color: #1f1e1e;
+}
+
+/* Responsive on mobile */
+@media(max-width: 767.98px){
+    .view-toggle-group-btn:not(.active){
+        display: none;
+    }
+    .view-toggle-group-btn.active{
+        border-radius: 0.5rem !important;
+    }
+    .app-sidebar{
+        display: none !important;
+    }
+    .app-sidebar.show{
+        display: flex !important;
+    }
+    /* Overlay */
+    .sidebar-overlay{
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+    }
+    .sidebar-overlay.show{
+        display: block;
+    }
+    /* Header can z-index cao hon sidebar de nut menu khong bi de */
+    .app-header{
+        position: relative;
+        z-index: 1060;
+    }
+    
+}
