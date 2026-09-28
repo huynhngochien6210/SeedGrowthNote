@@ -2,11 +2,18 @@
 
 $page = $_GET['page'] ?? 'login';
 
-if ($page === 'login') {
-    $contentFile = 'pages/login.php';
-} elseif ($page === 'home') {
-    $contentFile = null;
-} else {
-    $page = 'login';
-    $contentFile = 'pages/login.php';
+switch ($page) {
+
+    case 'login':
+        $contentFile = 'pages/login.php';
+        break;
+
+    case 'home':
+        $contentFile = null;
+        break;
+
+    default:
+        $page = 'login';
+        $contentFile = 'pages/login.php';
+        break;
 }
