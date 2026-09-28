@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/route.php';
+//require_once __DIR__ . '/route.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,22 +35,22 @@ require_once __DIR__ . '/route.php';
     <link rel="stylesheet" href="css/verify_email_toast.css">
 
     <!-- css login -->
-    <?php if ($page === 'login'): ?>
-        <link rel="stylesheet" href="css/login.css">
-    <?php endif; ?>
+    <?php // if ($page === 'login'): ?>
+        <!-- <link rel="stylesheet" href="css/login.css"> -->
+    <?php // endif; ?>
 
     <title>Seedgrowthnote</title>
 </head>
 
 <body>
 
-    <?php if ($page === 'login'): ?>
+    <!-- <?php //if ($page === 'login'): ?>
 
-        <?php include 'components/hero.php'; ?>
+        <?php //include 'components/hero.php'; ?>
 
-        <?php include 'components/blurBG.php'; ?>
+        <?php //include 'components/blurBG.php'; ?>
 
-    <?php else: ?>
+    <?php //else: ?> -->
 
         <!-- Import file header vào -->
         <?php include 'components/header.php'; ?>
@@ -67,7 +67,7 @@ require_once __DIR__ . '/route.php';
             </div>
         </main>
 
-    <?php endif; ?>
+    <?php //endif; ?>
 
     <!-- js-bootstrap -->
     <script
