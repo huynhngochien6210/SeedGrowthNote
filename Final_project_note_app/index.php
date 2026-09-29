@@ -29,10 +29,14 @@
     </script>
 
     <!-- my css -->
+     <link rel="stylesheet" href="css/darkMode&Respon.css">
+     <link rel="stylesheet" href="css/homePage.css">
+     <link rel="stylesheet" href="css/verify_email_toast.css">
     <link rel="stylesheet" href="css/general.css">
     <link rel="stylesheet" href="css/darkMode&Respon.css">
     <link rel="stylesheet" href="css/homePage.css">
     <link rel="stylesheet" href="css/verify_email_toast.css">
+    <link rel="stylesheet" href="css/note_board.css">
 
     <!-- css login -->
     <?php // if ($page === 'login'): ?>
@@ -43,6 +47,36 @@
 </head>
 
 <body>
+    <!-- Import file header vào -->
+    <?php include 'components/header.php'; ?>
+    <main class="app-main d-flex">
+        <div class="app-main-inner d-flex w-100 min-vh-100">
+            <!-- Import sidebar -->
+            <?php include 'components/sidebar.php'; ?>
+            <!-- Import verify_email_toast -->
+             <?php include 'components/verify_email_toast.php'; ?>
+        </div>
+    </main>
+        <?php //include 'components/hero.php'; ?>
+        
+        <?php //include 'components/blurBG.php'; ?>
+    <?php //else: ?>
+
+        <!-- Import file header vào -->
+        <?php include 'components/header.php'; ?>
+
+        <main class="app-main d-flex">
+            <div class="app-main-inner d-flex w-100 min-vh-100">
+
+                <!-- Import sidebar -->
+                <?php include 'components/sidebar.php'; ?>
+
+                <!-- Import verify_email_toast -->
+                <?php include 'components/verify_email_toast.php'; ?>
+
+                <!-- Import note board -->
+                <?php include 'components/note_board.php'; ?>
+
 
     <!-- <?php //if ($page === 'login'): ?>
 
@@ -77,6 +111,9 @@
     </script>
 
     <!-- my javascript -->
+     <script src="js/homePage.js"></script>
+    <script src="js/homePage.js"></script>
+    <script src="js/note_board.js"></script>
     <script src="js/homePage.js"></script>
 
 </body>
