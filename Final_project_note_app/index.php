@@ -29,14 +29,11 @@
     </script>
 
     <!-- my css -->
-     <link rel="stylesheet" href="css/darkMode&Respon.css">
-     <link rel="stylesheet" href="css/homePage.css">
-     <link rel="stylesheet" href="css/verify_email_toast.css">
     <link rel="stylesheet" href="css/general.css">
     <link rel="stylesheet" href="css/darkMode&Respon.css">
     <link rel="stylesheet" href="css/homePage.css">
-    <link rel="stylesheet" href="css/verify_email_toast.css">
     <link rel="stylesheet" href="css/note_board.css">
+    <link rel="stylesheet" href="css/verify_email_toast.css">
 
     <!-- css login -->
     <?php // if ($page === 'login'): ?>
@@ -47,74 +44,30 @@
 </head>
 
 <body>
-    <!-- Import file header vào -->
-    <?php include 'components/header.php'; ?>
-    <main class="app-main d-flex">
-        <div class="app-main-inner d-flex w-100 min-vh-100">
-            <!-- Import sidebar -->
-            <?php include 'components/sidebar.php'; ?>
-            <!-- Import verify_email_toast -->
-             <?php include 'components/verify_email_toast.php'; ?>
-        </div>
-    </main>
-        <?php //include 'components/hero.php'; ?>
-        
-        <?php //include 'components/blurBG.php'; ?>
-    <?php //else: ?>
-
-        <!-- Import file header vào -->
-        <?php include 'components/header.php'; ?>
-
-        <main class="app-main d-flex">
-            <div class="app-main-inner d-flex w-100 min-vh-100">
-
-                <!-- Import sidebar -->
-                <?php include 'components/sidebar.php'; ?>
-
-                <!-- Import verify_email_toast -->
-                <?php include 'components/verify_email_toast.php'; ?>
-
-                <!-- Import note board -->
-                <?php include 'components/note_board.php'; ?>
-
-
-    <!-- <?php //if ($page === 'login'): ?>
+    <?php //if ($page === 'login'): ?>
 
         <?php //include 'components/hero.php'; ?>
 
         <?php //include 'components/blurBG.php'; ?>
 
-    <?php //else: ?> -->
-
+    <?php //else: ?> 
         <!-- Import file header vào -->
         <?php include 'components/header.php'; ?>
 
         <main class="app-main d-flex">
             <div class="app-main-inner d-flex w-100 min-vh-100">
-
                 <!-- Import sidebar -->
                 <?php include 'components/sidebar.php'; ?>
-
                 <!-- Import verify_email_toast -->
                 <?php include 'components/verify_email_toast.php'; ?>
-
+                <?php include 'components/note_board.php';?>
             </div>
         </main>
 
     <?php //endif; ?>
 
-    <!-- js-bootstrap -->
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9H09JcYn3nv7wiPVlz7YYWJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous">
-    </script>
-
     <!-- my javascript -->
      <script src="js/homePage.js"></script>
-    <script src="js/homePage.js"></script>
     <script src="js/note_board.js"></script>
-    <script src="js/homePage.js"></script>
-
 </body>
 </html>
