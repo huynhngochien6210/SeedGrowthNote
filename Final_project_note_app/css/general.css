@@ -1,0 +1,121 @@
+/* Default */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    min-height: 100vh;
+    background-color: #031c10;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+/* Hero */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 470px;
+    overflow: hidden;
+    z-index: 2;
+}
+
+/* Hero image */
+.hero-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(
+            rgba(0, 0, 0, 0.15),
+            rgba(0, 0, 0, 0.15)
+        ),
+        url("../image/farm.jpg");
+    background-size: cover;
+    background-position: center;
+    /* Curve*/
+    border-bottom-left-radius: 50% 18%;
+    border-bottom-right-radius: 50% 18%;
+    /* Green border */
+    border-bottom: 7px solid #91b72b;
+}
+
+/* Logo */
+.brand-logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+.curve-text {
+    fill: white;
+    font-family: Arial, sans-serif;
+    font-size: 85px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+
+/* Authentication */
+.auth-section {
+    position: relative;
+    min-height: 600px;
+    margin-top: -40px;
+    padding-top: 80px;
+    padding-bottom: 60px;
+    background-image:
+        linear-gradient(
+            rgba(0, 35, 18, 0.30),
+            rgba(0, 25, 12, 0.45)
+        ),
+        url("../image/farm.jpg");
+    background-size: cover;
+    background-position: bottom center;
+    overflow: hidden;
+}
+
+/* Blur background */
+.auth-section-overlay {
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1;
+}
+
+/* Authentication content */
+.auth-section .container {
+    position: relative;
+
+    z-index: 10;
+}
+.auth-wrapper {
+    position: relative;
+    z-index: 10;
+    transform: translateY(-70px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero {
+        height: 360px;
+    }
+    .curve-text {
+        font-size: 55px;
+    }
+    .auth-section {
+        margin-top: -30px;
+
+        min-height: 650px;
+
+        padding-top: 70px;
+    }
+    .auth-wrapper {
+        transform: translateY(-40px);
+    }
+
+}
