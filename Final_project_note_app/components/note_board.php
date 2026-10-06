@@ -1,5 +1,5 @@
 <!-- Note board -->
-<div class="note-board">
+<div class="note-board" id="noteBoardView">
     <div class="note-board-grid d-flex flex-wrap" id="noteGrid">
         <!-- Create note -->
          <div class="new-note-card d-flex align-items-center gap-3 align-items-center" type="button">           

@@ -21,6 +21,9 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     >
 
+    <!-- js bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- Chế độ light/dark sẽ chạy sớm nhất trước khi trang vẽ ra màn hình -->
     <script>
         if (localStorage.getItem('theme') == 'dark') {
@@ -34,6 +37,7 @@
     <link rel="stylesheet" href="css/homePage.css">
     <link rel="stylesheet" href="css/note_board.css">
     <link rel="stylesheet" href="css/verify_email_toast.css">
+    <link rel="stylesheet" href="css/shareWithMe.css">
 
     <!-- css login -->
     <?php // if ($page === 'login'): ?>
@@ -60,7 +64,10 @@
                 <?php include 'components/sidebar.php'; ?>
                 <!-- Import verify_email_toast -->
                 <?php include 'components/verify_email_toast.php'; ?>
+                <!-- Import note board -->
                 <?php include 'components/note_board.php';?>
+                <!-- Import shared with me -->
+                 <?php include 'components/shareWithMe.php'; ?>
             </div>
         </main>
 
@@ -69,5 +76,6 @@
     <!-- my javascript -->
      <script src="js/homePage.js"></script>
     <script src="js/note_board.js"></script>
+    <script src="js/shareWithMe.js"></script>
 </body>
 </html>
