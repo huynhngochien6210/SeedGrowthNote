@@ -37,6 +37,8 @@ require_once __DIR__ . '/route.php';
     <!-- css login -->
     <?php if ($page === 'login'): ?>
         <link rel="stylesheet" href="css/login.css">
+    <?php elseif ($page === 'signup'): ?> 
+        <link rel="stylesheet" href="css/signup.css">
     <?php endif; ?>
 
     <title>Seedgrowthnote</title>
