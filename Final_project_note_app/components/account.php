@@ -32,5 +32,43 @@
                 </li>
             </ul>
         </div>
+        <!-- Right: profile fields -->
+        <div class="account-main flex-grow-1 p-4 p-md-5 position-relative">
+            <button class="edit-profile-btn" type="button" id="editProfileBtn">
+                Edit profile
+            </button>
+
+            <h2 class="account-username mb-1" id="usernameDisplay">USERNAME</h2>
+            <p class="account-subtitle mb-4">Change username</p>
+
+            <form id="accountForm">
+                <div class="row gy-4">
+                    <div class="col-12 col-md-6">
+                        <label class="account-field-label">
+                            <i class="bi bi-envelope"></i> Email
+                        </label>
+                        <input type="email" class="account-field-input" value="" placeholder="you@example.com" readonly>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="account-field-label">
+                            <i class="bi bi-calendar3"></i> Date of birth
+                        </label>
+                        <input type="text" class="account-field-input" value="" placeholder="dd/mm/yyyy" readonly>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="account-field-label">
+                            <i class="bi bi-person-vcard"></i> Fullname
+                        </label>
+                        <input type="text" class="account-field-input" value="" placeholder="Your full name" readonly>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="account-field-label">
+                            <i class="bi bi-gender-ambiguous"></i> Gender
+                        </label>
+                        <input type="text" class="account-field-input" value="" placeholder="Your gender" readonly>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
