@@ -46,6 +46,12 @@ body.dark-mode .note-dropdown-menu{
 body.dark-mode .note-dropdown-item{
     color: #1f1e1e;
 }
+body.shared-board{
+  background-color: #254f22;
+}
+body.shared-board-title{
+  color: #ffffff;
+}
 
 /* Responsive on mobile */
 @media(max-width: 767.98px){
