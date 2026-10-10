@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/route.php';
+//require_once __DIR__ . '/route.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,6 +21,9 @@ require_once __DIR__ . '/route.php';
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     >
 
+    <!-- js bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- Chế độ light/dark sẽ chạy sớm nhất trước khi trang vẽ ra màn hình -->
     <script>
         if (localStorage.getItem('theme') == 'dark') {
@@ -32,54 +35,49 @@ require_once __DIR__ . '/route.php';
     <link rel="stylesheet" href="css/general.css">
     <link rel="stylesheet" href="css/darkMode&Respon.css">
     <link rel="stylesheet" href="css/homePage.css">
+    <link rel="stylesheet" href="css/note_board.css">
     <link rel="stylesheet" href="css/verify_email_toast.css">
+    <link rel="stylesheet" href="css/shareWithMe.css">
 
     <!-- css login -->
-    <?php if ($page === 'login'): ?>
-        <link rel="stylesheet" href="css/login.css">
-    <?php elseif ($page === 'signup'): ?> 
-        <link rel="stylesheet" href="css/signup.css">
-    <?php endif; ?>
+    <?php // if ($page === 'login'): ?>
+        <!-- <link rel="stylesheet" href="css/login.css"> -->
+    <?php // elseif ($page === 'signup'): ?> 
+        <!-- <link rel="stylesheet" href="css/signup.css"> -->
+    <?php // endif; ?>
 
     <title>Seedgrowthnote</title>
 </head>
 
 <body>
+    <?php //if ($page === 'login'): ?>
 
-    <?php if ($page === 'login'): ?>
+        <?php //include 'components/hero.php'; ?>
 
-        <?php include 'components/hero.php'; ?>
+        <?php //include 'components/blurBG.php'; ?>
 
-        <?php include 'components/blurBG.php'; ?>
-
-    <?php else: ?>
-
+    <?php //else: ?> 
         <!-- Import file header vào -->
         <?php include 'components/header.php'; ?>
 
         <main class="app-main d-flex">
             <div class="app-main-inner d-flex w-100 min-vh-100">
-
                 <!-- Import sidebar -->
                 <?php include 'components/sidebar.php'; ?>
-
                 <!-- Import verify_email_toast -->
                 <?php include 'components/verify_email_toast.php'; ?>
-
+                <!-- Import note board -->
+                <?php include 'components/note_board.php';?>
+                <!-- Import shared with me -->
+                 <?php include 'components/shareWithMe.php'; ?>
             </div>
         </main>
 
-    <?php endif; ?>
-
-    <!-- js-bootstrap -->
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9H09JcYn3nv7wiPVlz7YYWJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous">
-    </script>
+    <?php //endif; ?>
 
     <!-- my javascript -->
-    <script src="js/homePage.js"></script>
-
+     <script src="js/homePage.js"></script>
+    <script src="js/note_board.js"></script>
+    <script src="js/shareWithMe.js"></script>
 </body>
 </html>

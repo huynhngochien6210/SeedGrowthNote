@@ -1,0 +1,56 @@
+.shared-board {
+    width: 100%;
+    margin: 40px;
+    box-sizing: border-box;
+    background-color: #efe9da;
+    border-radius: 30px;
+    padding: 30px;
+}
+.shared-board-title {
+    color: #254f22;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+}
+.shared-board-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px 28px;
+}
+.shared-note-card {
+    position: relative;
+    height: 84px;
+    border-radius: 30px;
+    overflow: visible;
+    background-color: rgba(163, 110, 3, 0.542);
+    background-size: cover;
+    cursor: pointer;
+}
+.shared-note-icon {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    margin-left: -15px;
+    flex-shrink: 0;
+}
+.shared-note-icon svg {
+    width: 80%;
+    height: 80%;
+}
+.shared-note-info {
+    padding: 8px 20px 8px 12px;
+    color: #0f0e0e;
+}
+.shared-note-title {
+    font-weight: 700;
+    font-size: .9rem;
+}
+.shared-note-received {
+    color: rgba(255,255,255,.85);
+}
+.shared-note-sharer {
+    color: rgba(255,255,255,.8);
+}
+.shared-note-permission { 
+    color: rgba(255,255,255,.8); 
+}

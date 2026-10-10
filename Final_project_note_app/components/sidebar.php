@@ -4,7 +4,7 @@
                     <i class="bi bi-funnel fs-4"></i>
                     <div class="small">Filter tags</div>
                 </div>
-                <div class="sidebar-icon-item text-center">
+                <div class="sidebar-icon-item text-center" id="shareWithBtn" role="button">
                     <i class="bi bi-folder2 fs-4"></i>
                     <div class="small">Shared with me</div>
                 </div>

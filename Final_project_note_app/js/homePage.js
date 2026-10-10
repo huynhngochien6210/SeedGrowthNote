@@ -42,6 +42,6 @@ menuBtn.addEventListener('click', toggleSidebar);
 window.addEventListener('resize', () => {
   if (window.innerWidth >= 768 && appSidebar.classList.contains('show')) {
     appSidebar.classList.remove('show');
-  }
+  } 
 });
 
