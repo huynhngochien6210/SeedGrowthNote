@@ -46,10 +46,10 @@ body.dark-mode .note-dropdown-menu{
 body.dark-mode .note-dropdown-item{
     color: #1f1e1e;
 }
-body.shared-board{
+body.dark-mode .shared-board{
   background-color: #254f22;
 }
-body.shared-board-title{
+body.dark-mode .shared-board-title{
   color: #ffffff;
 }
 
