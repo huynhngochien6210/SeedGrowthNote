@@ -71,6 +71,9 @@
             </div>
         </main>
 
+        <!-- Import share note -->
+        <?php include 'components/shareNote.php'; ?>
+
     <?php //endif; ?>
 
     <!-- my javascript -->
