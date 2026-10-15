@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="css/note_board.css">
     <link rel="stylesheet" href="css/verify_email_toast.css">
     <link rel="stylesheet" href="css/shareWithMe.css">
+    <link rel="stylesheet" href="css/shareNote.css">
 
     <!-- css login -->
     <?php // if ($page === 'login'): ?>
@@ -63,11 +64,11 @@
                 <!-- Import sidebar -->
                 <?php include 'components/sidebar.php'; ?>
                 <!-- Import verify_email_toast -->
-                <?php include 'components/verify_email_toast.php'; ?>
+                <?php //include 'components/verify_email_toast.php'; ?>
                 <!-- Import note board -->
-                <?php include 'components/note_board.php';?>
+                <?php //include 'components/note_board.php';?>
                 <!-- Import shared with me -->
-                 <?php include 'components/shareWithMe.php'; ?>
+                 <?php //include 'components/shareWithMe.php'; ?>
             </div>
         </main>
 
