@@ -7,6 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    
+
     <!-- css-bootstrap -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
@@ -36,8 +38,10 @@
     <link rel="stylesheet" href="css/darkMode&Respon.css">
     <link rel="stylesheet" href="css/homePage.css">
     <link rel="stylesheet" href="css/note_board.css">
+    <link rel="stylesheet" href="css/account.css">
     <link rel="stylesheet" href="css/verify_email_toast.css">
     <link rel="stylesheet" href="css/shareWithMe.css">
+    <link rel="stylesheet" href="css/shareNote.css">
 
     <!-- css login -->
     <?php // if ($page === 'login'): ?>
@@ -66,19 +70,27 @@
             <div class="app-main-inner d-flex w-100 min-vh-100">
                 <!-- Import sidebar -->
                 <?php include 'components/sidebar.php'; ?>
+                <!-- Import account -->
+                <?php include 'components/account.php'; ?>
+                <!-- Import password -->
+                <?php include 'components/password.php'; ?>
                 <!-- Import verify_email_toast -->
-                <?php include 'components/verify_email_toast.php'; ?>
+                <?php //include 'components/verify_email_toast.php'; ?>
                 <!-- Import note board -->
-                <?php include 'components/note_board.php';?>
+                <?php //include 'components/note_board.php';?>
                 <!-- Import shared with me -->
-                 <?php include 'components/shareWithMe.php'; ?>
+                <?php include 'components/shareWithMe.php'; ?>
             </div>
         </main>
+
+        <!-- Import share note -->
+        <?php include 'components/shareNote.php'; ?>
 
     <?php //endif; ?>
 
     <!-- my javascript -->
      <script src="js/homePage.js"></script>
+     <script src="js/account.js"></script>
     <script src="js/note_board.js"></script>
     <script src="js/shareWithMe.js"></script>
 </body>
