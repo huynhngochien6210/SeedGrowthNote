@@ -46,6 +46,10 @@
     <!-- css login -->
     <?php // if ($page === 'login'): ?>
         <!-- <link rel="stylesheet" href="css/login.css"> -->
+    <?php // elseif ($page === 'signup'): ?> 
+        <!-- <link rel="stylesheet" href="css/signup.css"> -->
+    <?php // elseif ($page === 'verify'): ?> 
+        <!-- <link rel="stylesheet" href="css/verify.css"> -->
     <?php // endif; ?>
 
     <title>Seedgrowthnote</title>
