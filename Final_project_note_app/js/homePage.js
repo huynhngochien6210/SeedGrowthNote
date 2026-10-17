@@ -45,3 +45,19 @@ window.addEventListener('resize', () => {
   } 
 });
 
+
+/* Panel navigation */
+document.querySelectorAll('.nav-panel-btn').forEach(button => {
+    button.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        const target = this.dataset.panel;
+
+        document.querySelectorAll('.app-panel').forEach(panel => {
+            panel.classList.toggle(
+                'active',
+                panel.dataset.panelName === target
+            );
+        });
+    });
+});

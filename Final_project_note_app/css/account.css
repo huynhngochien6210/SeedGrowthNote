@@ -209,3 +209,67 @@ body.dark-mode .panel-back-btn:hover{
 .account-field-input[readonly]{
     color: rgba(37, 79, 34, 0.75);
 }
+
+/* ===== Dark mode ===== */
+
+body.dark-mode .account-card{
+    background-color: #162b20;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .account-main{
+    background-color: #162b20;
+}
+
+body.dark-mode .account-username,
+body.dark-mode .account-field-label{
+    color: #ffffff;
+}
+
+body.dark-mode .account-subtitle{
+    color: rgba(255, 255, 255, 0.6);
+}
+
+body.dark-mode .account-field-input{
+    color: #ffffff;
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+}
+
+body.dark-mode .account-field-input:focus{
+    border-bottom-color: #ffffff;
+}
+
+body.dark-mode .edit-profile-btn{
+    background-color: #d3ba14;
+    color: #ffffff;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 767.98px){
+
+    .account-card{
+        border-radius: 20px;
+    }
+
+    .account-side{
+        min-width: 100%;
+    }
+
+    .edit-profile-btn{
+        position: static;
+        margin-bottom: 1rem;
+        display: inline-block;
+    }
+
+}
+
+/* ===== Panel switching (Account, Notes, ...) ===== */
+
+.app-panel{
+    display: none;
+    width: 100%;
+}
+
+.app-panel.active{
+    display: flex;
+}
