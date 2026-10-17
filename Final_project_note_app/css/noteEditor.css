@@ -1,0 +1,719 @@
+
+/* =========================================
+   1. NOTE EDITOR PANEL - KHUNG NGOAI
+========================================= */
+
+
+#noteEditorPanel {
+    display: none;
+    flex: 0.77 1 0;
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 0;
+    height: 90%;
+
+    margin-left: 0;
+    margin-right: 15px;
+    padding: 8px;
+
+    box-sizing: border-box;
+    overflow: hidden;
+
+    position: relative;
+    left: 0;
+}
+
+#noteEditorPanel.active {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+
+
+
+/* =========================================
+   2. KHUNG EDITOR BEN TRONG
+========================================= */
+
+#noteEditorPanel > .note-editor-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+
+    padding: 16px;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    background: linear-gradient(
+        135deg,
+        #f5fff0 0%,
+        #eaf8e4 100%
+    );
+
+    color: #254f22;
+    border: 1px solid rgba(88, 145, 77, 0.3);
+    border-radius: 24px;
+    box-shadow: 0 4px 18px rgba(34, 76, 29, 0.08);
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* =========================================
+   3. HEADER
+========================================= */
+
+.note-editor-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 12px;
+
+    flex: 0 0 auto;
+    min-width: 0;
+    margin-bottom: 12px;
+}
+
+.note-back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    flex: 0 0 auto;
+    padding: 6px 2px;
+
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #254f22;
+
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.note-back-btn:hover {
+    color: #4b8a3f;
+}
+
+.note-editor-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.note-editor-leaf {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+
+    border-radius: 12px;
+    background: #d7f0c3;
+    color: #315d26;
+    font-size: 20px;
+}
+
+.note-editor-name {
+    flex: 0 1 auto;
+    width: 150px;
+    max-width: 100%;
+    min-width: 0;
+
+    padding: 6px 2px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #183d20;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.note-rename-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #315d26;
+
+    cursor: pointer;
+}
+
+.note-rename-btn:hover {
+    background: #dcefd4;
+}
+
+/* =========================================
+   4. TITLE INPUT
+========================================= */
+
+.note-title-input {
+    display: block;
+    flex: 0 0 auto;
+
+    width: 100%;
+    height: 40px;
+    margin: 0 0 10px;
+    padding: 0 16px;
+
+    box-sizing: border-box;
+    border: 1px solid #8ebc85;
+    border-radius: 15px;
+    outline: none;
+
+    background: rgba(255, 255, 255, 0.4);
+    color: #254f22;
+
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.note-title-input::placeholder {
+    color: #8c9b87;
+}
+
+.note-title-input:focus {
+    border-color: #4c9147;
+    box-shadow: 0 0 0 3px rgba(95, 157, 78, 0.12);
+}
+
+/* =========================================
+   5. WRITING AREA
+========================================= */
+
+.note-writing-area {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 100px;
+
+    margin-top: 0;
+    overflow: hidden;
+
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.28);
+}
+
+/* =========================================
+   6. TOOLBAR - THANH CONG CU
+========================================= */
+
+.note-toolbar {
+    display: flex !important;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+
+    padding: 4px 8px;
+    box-sizing: border-box;
+
+    visibility: visible;
+    opacity: 1;
+    overflow: visible;
+
+    border-bottom: 1px solid rgba(103, 148, 93, 0.15);
+    background: rgba(226, 244, 218, 0.65);
+}
+
+.note-toolbar button {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #254f22;
+
+    font-size: 16px;
+    cursor: pointer;
+
+    visibility: visible;
+    opacity: 1;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.note-toolbar button:hover {
+    background: #d3eac9;
+    color: #17451d;
+}
+
+.note-toolbar button:active {
+    background: #bddfb0;
+}
+
+.note-toolbar button:focus-visible {
+    outline: 2px solid #478b3b;
+    outline-offset: 2px;
+}
+
+.note-toolbar-divider {
+    display: block;
+    flex: 0 0 1px;
+
+    width: 1px;
+    height: 22px;
+    margin: 0 4px;
+
+    background: #c7ddbf;
+}
+
+/* =========================================
+   7. NOTE CONTENT
+========================================= */
+
+.note-content {
+    display: block;
+    flex: 1 1 auto;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+
+    padding: 16px;
+    box-sizing: border-box;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+    overflow-wrap: anywhere;
+
+    outline: none;
+    border: none;
+    background: transparent;
+
+    color: #233d25;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.note-content:empty::before {
+    content: attr(data-placeholder);
+    color: #8d9a89;
+    pointer-events: none;
+}
+
+.note-content:focus {
+    outline: none;
+}
+
+.note-content ul,
+.note-content ol {
+    padding-left: 26px;
+}
+
+.note-content a {
+    color: #377c35;
+    text-decoration: underline;
+}
+
+/* =========================================
+   8. FOOTER
+========================================= */
+
+.note-editor-footer {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    flex: 0 0 auto;
+    min-width: 0;
+    min-height: 42px;
+
+    padding: 10px 2px 0;
+    box-sizing: border-box;
+}
+
+.note-toggle-option {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    flex: 0 0 auto;
+    margin: 0;
+
+    color: #254f22;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.note-toggle-option > i {
+    font-size: 16px;
+}
+
+/* An checkbox mac dinh */
+
+.note-toggle-option input[type="checkbox"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+/* Toggle switch */
+
+.note-toggle-switch {
+    position: relative;
+    display: inline-block;
+
+    flex: 0 0 38px;
+    width: 38px;
+    height: 21px;
+
+    border-radius: 20px;
+    background: #c8d0c4;
+
+    transition: background 0.2s ease;
+}
+
+.note-toggle-switch::after {
+    content: "";
+
+    position: absolute;
+    top: 3px;
+    left: 3px;
+
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+
+    transition: transform 0.2s ease;
+}
+
+.note-toggle-option input:checked + .note-toggle-switch {
+    background: #78b94e;
+}
+
+.note-toggle-option input:checked + .note-toggle-switch::after {
+    transform: translateX(17px);
+}
+
+.note-toggle-option input:focus-visible + .note-toggle-switch {
+    outline: 2px solid #478b3b;
+    outline-offset: 3px;
+}
+
+/* =========================================
+   9. AI ASSIST BUTTON
+========================================= */
+
+.note-ai-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    flex: 0 0 auto;
+    min-height: 36px;
+
+    margin-left: auto;
+    padding: 8px 16px;
+
+    border: none;
+    border-radius: 20px;
+    background: #376b22;
+    color: #fff;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.note-ai-btn:hover {
+    background: #28541a;
+    transform: translateY(-1px);
+}
+
+.note-ai-btn i {
+    font-size: 15px;
+}
+
+/* =========================================
+   10. PASSWORD INPUT
+========================================= */
+
+.note-password-area {
+    flex: 0 0 auto;
+    padding-top: 10px;
+}
+
+.note-password-area[hidden] {
+    display: none !important;
+}
+
+.note-password-area input {
+    width: 100%;
+    height: 38px;
+    padding: 0 12px;
+
+    box-sizing: border-box;
+    border: 1px solid #9abc90;
+    border-radius: 12px;
+    outline: none;
+
+    background: #fff;
+    color: #234329;
+
+    font-family: inherit;
+}
+
+.note-password-area input:focus {
+    border-color: #4c9147;
+}
+
+
+
+/* =========================================
+   11. RESPONSIVE - LAPTOP
+========================================= */
+
+@media (max-width: 1199px) {
+    #noteEditorPanel {
+        left: 0;
+        flex: 1 1 0;
+        width: auto;
+        max-width: 100%;
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+
+    #noteEditorPanel > .note-editor-panel {
+        padding: 12px;
+        border-radius: 18px;
+    }
+
+    .note-editor-header {
+        gap: 8px;
+    }
+
+    .note-editor-name {
+        width: 120px;
+        font-size: 16px;
+    }
+
+    .note-editor-footer {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+}
+
+/* =========================================
+   12. RESPONSIVE - TABLET
+========================================= */
+
+@media (max-width: 768px) {
+    #noteEditorPanel {
+        flex: 1 1 100%;
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        min-width: 0;
+        margin: 0;
+        padding: 4px;
+        left: 0;
+    }
+
+    #noteEditorPanel > .note-editor-panel {
+        width: 100%;
+        min-width: 0;
+        min-height: 0;
+        padding: 10px;
+        border-radius: 14px;
+    }
+
+    .note-editor-header {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .note-editor-heading {
+        flex: 1 1 140px;
+        min-width: 0;
+        gap: 6px;
+    }
+
+    .note-editor-name {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: 0;
+        font-size: 14px;
+    }
+
+    .note-title-input {
+        width: 100%;
+        min-width: 0;
+        padding: 0 10px;
+    }
+
+    .note-writing-area {
+        flex: 1 1 0;
+        min-width: 0;
+        min-height: 100px;
+    }
+
+    .note-toolbar {
+        flex-wrap: wrap;
+        gap: 3px;
+        padding: 4px;
+    }
+
+    .note-toolbar button {
+        flex: 0 0 30px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .note-content {
+        padding: 10px;
+        overflow-wrap: anywhere;
+    }
+
+    .note-editor-footer {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding-top: 8px;
+        margin-top: auto;
+    }
+
+    .note-ai-btn {
+        margin-left: auto;
+        max-width: 100%;
+    }
+}
+
+/* =========================================
+   13. RESPONSIVE - SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+    #noteEditorPanel > .note-editor-panel {
+        padding: 8px;
+    }
+
+    .note-back-btn {
+        font-size: 12px;
+    }
+
+    .note-editor-leaf {
+        flex: 0 0 30px;
+        width: 30px;
+        height: 30px;
+        font-size: 15px;
+    }
+
+    .note-toolbar {
+        gap: 2px;
+    }
+
+    .note-toolbar button {
+        flex-basis: 27px;
+        width: 27px;
+        height: 27px;
+        font-size: 13px;
+    }
+
+    .note-toolbar-divider {
+        margin: 0 2px;
+    }
+
+    .note-toggle-option {
+        gap: 4px;
+        font-size: 11px;
+    }
+
+    .note-toggle-switch {
+        flex-basis: 32px;
+        width: 32px;
+        height: 19px;
+    }
+
+    .note-toggle-switch::after {
+        width: 13px;
+        height: 13px;
+    }
+
+    .note-toggle-option input:checked + .note-toggle-switch::after {
+        transform: translateX(13px);
+    }
+
+    .note-ai-btn {
+        padding: 6px 8px;
+        gap: 5px;
+        font-size: 11px;
+        white-space: normal;
+    }
+}
+
+/* =========================================
+   14. SHORT SCREEN
+========================================= */
+
+@media (max-height: 600px) {
+    #noteEditorPanel {
+        height: 100%;
+    }
+
+    #noteEditorPanel > .note-editor-panel {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .note-editor-header {
+        margin-bottom: 6px;
+    }
+
+    .note-title-input {
+        margin-bottom: 6px;
+    }
+
+    .note-editor-footer {
+        padding-top: 6px;
+    }
+}
