@@ -1,6 +1,7 @@
 
     (function () {
         const editBtn = document.getElementById('editProfileBtn');
+        if (!editBtn) return; 
         const inputs = document.querySelectorAll('.account-field-input');
         let editing = false;
 
