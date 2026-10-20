@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="css/homePage.css">
     <link rel="stylesheet" href="css/note_board.css">
     <link rel="stylesheet" href="css/account.css">
+    <link rel="stylesheet" href="css/password.css">
     <link rel="stylesheet" href="css/verify_email_toast.css">
     <link rel="stylesheet" href="css/shareWithMe.css">
     <link rel="stylesheet" href="css/shareNote.css">
@@ -75,7 +76,10 @@
                 <!-- Import password -->
                 <?php include 'components/password.php'; ?>
                 <!-- Import verify_email_toast -->
-                <?php //include 'components/verify_email_toast.php'; ?>
+                <?php include 'components/verify_email_toast.php'; ?>
+                <!-- Import filter tags -->
+                <?php include 'components/filter_tags.php'; ?>
+
                 <!-- Import note board -->
                 <?php //include 'components/note_board.php';?>
                 <!-- Import shared with me -->
@@ -91,6 +95,7 @@
     <!-- my javascript -->
      <script src="js/homePage.js"></script>
      <script src="js/account.js"></script>
+     <script src="js/password.js"></script>
     <script src="js/note_board.js"></script>
     <script src="js/shareWithMe.js"></script>
 </body>
