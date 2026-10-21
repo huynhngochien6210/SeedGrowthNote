@@ -81,7 +81,7 @@
                 <?php include 'components/filter_tags.php'; ?>
 
                 <!-- Import note board -->
-                <?php //include 'components/note_board.php';?>
+                <?php include 'components/note_board.php';?>
                 <!-- Import shared with me -->
                 <?php include 'components/shareWithMe.php'; ?>
             </div>

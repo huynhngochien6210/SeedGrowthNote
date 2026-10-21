@@ -1,6 +1,6 @@
 <!-- Share note -->
 <div class="modal fade share-note-modal" id="shareNoteModal" tabindex="-1"
-     aria-labelledby="shareNoteTitle" aria-hidden="true" style="display: block;">
+     aria-labelledby="shareNoteTitle" aria-hidden="true" aria-labelledby="shareNoteTitle">
 
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content share-note-content">
