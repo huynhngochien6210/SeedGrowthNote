@@ -717,3 +717,38 @@
         padding-top: 6px;
     }
 }
+
+/* Edit darkmaode */
+
+body.dark-mode #noteEditorPanel > .note-editor-panel {
+    background: linear-gradient(
+        135deg,
+        #202b23 0%,
+        #172019 100%
+    );
+
+    color: #e7eee8;
+    border-color: rgba(130, 180, 135, 0.3);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .note-editor-name,
+body.dark-mode .note-title-input,
+body.dark-mode .note-content {
+    color: #e7eee8;
+}
+
+body.dark-mode .note-title-input,
+body.dark-mode .note-content {
+    background-color: #202823;
+    border-color: #37443a;
+}
+
+body.dark-mode .note-toolbar {
+    background-color: #252e28;
+    border-color: #37443a;
+}
+
+body.dark-mode .note-toolbar button {
+    color: #e7eee8;
+}
