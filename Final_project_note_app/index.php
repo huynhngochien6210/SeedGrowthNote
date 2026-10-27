@@ -94,6 +94,7 @@
 
     <!-- my javascript -->
      <script src="js/homePage.js"></script>
+     <script src="js/filter_tags.js"></script>
      <script src="js/account.js"></script>
      <script src="js/password.js"></script>
     <script src="js/note_board.js"></script>
