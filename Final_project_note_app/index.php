@@ -40,6 +40,7 @@
     <link rel="stylesheet" href="css/note_board.css">
     <link rel="stylesheet" href="css/account.css">
     <link rel="stylesheet" href="css/password.css">
+    <link rel="stylesheet" href="css/filter_tags.css">
     <link rel="stylesheet" href="css/verify_email_toast.css">
     <link rel="stylesheet" href="css/shareWithMe.css">
     <link rel="stylesheet" href="css/shareNote.css">
