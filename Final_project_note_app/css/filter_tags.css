@@ -1,0 +1,43 @@
+/* Filter tags — uses the existing SeedGrowthNote green/cream palette */
+.filter-tags-panel[hidden] { display: none !important; }
+.filter-tags-panel {
+    flex: 0 0 210px;
+    margin: 40px 0 30px 0;
+    min-width: 0;
+    min-height: 295px;
+    padding: 13px 8px 7px;
+    background: #f9f5ea;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    color: #254f22;
+}
+.filter-tags-panel h2 { font-size: 1.45rem; line-height: 1.3; font-weight: 750; padding: 0 3px; margin: 0; }
+.filter-tags-list { overflow-y: auto; min-height: 0; max-height: min(55vh, 460px); display: flex; flex-direction: column; gap: 14px; }
+.filter-tag-items { display: flex; flex-direction: column; gap: 14px; }
+.filter-tag-all, .filter-tag-item, .filter-tag-add {
+    min-height: 29px;
+    border: 2px solid #254f22;
+    border-radius: 9px;
+    background: rgba(235, 241, 224, .95);
+    color: #142e16;
+    box-shadow: 0 2px 4px rgba(0,0,0,.24);
+}
+.filter-tag-all { text-align: left; padding: 3px 12px; width: 100%; font-size: .85rem; }
+.filter-tag-item { display: flex; align-items: center; padding: 0 5px 0 11px; gap: 4px; }
+.filter-tag-name { background: none; border: 0; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; padding: 3px 0; color: inherit; font-size: .85rem; }
+.filter-tag-action { border: 0; background: none; color: #27722b; padding: 1px 3px; line-height: 1; font-size: 1rem; }
+.filter-tag-all:hover, .filter-tag-item:hover, .filter-tag-add:hover { background: #e4efd8; }
+.filter-tag-all.is-selected, .filter-tag-item.is-selected { outline: 2px solid #9bc986; outline-offset: 1px; }
+.filter-tags-message { color: #9b3030; font-size: .75rem; margin: 0; min-height: 1em; }
+.filter-tag-add { width: 100%; background: #f9f5ea; border-color: #d6c6a3; font-size: .8rem; margin-top: auto; padding: 4px 8px; }
+/* Keep the note board in the same row when tag panel opens */
+.filter-tags-panel:not([hidden]) ~ .note-board { margin-left: 14px; }
+body.dark-mode .filter-tags-panel { background: #203b2b; color: #f8f5e8; }
+body.dark-mode .filter-tag-all, body.dark-mode .filter-tag-item, body.dark-mode .filter-tag-add { background: #34553c; color: #fff; border-color: #b3d59f; }
+@media (max-width: 900px) { .filter-tags-panel { flex-basis: 185px; } .filter-tags-panel:not([hidden]) ~ .note-board { margin-left: 10px; } }
+@media (max-width: 767.98px) {
+    .filter-tags-panel { position: absolute; top: 6px; left: 12px; z-index: 1050; width: min(240px, calc(100vw - 24px)); max-height: 80vh; margin: 0; box-shadow: 0 8px 25px #0005; }
+    .filter-tags-panel:not([hidden]) ~ .note-board { margin-left: 40px; }
+}
