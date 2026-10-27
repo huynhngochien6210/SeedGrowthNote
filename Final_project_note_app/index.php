@@ -42,6 +42,7 @@
     <link rel="stylesheet" href="css/verify_email_toast.css">
     <link rel="stylesheet" href="css/shareWithMe.css">
     <link rel="stylesheet" href="css/shareNote.css">
+    <link rel="stylesheet" href="css/noteEditor.css">
 
     <!-- css login -->
     <?php // if ($page === 'login'): ?>
@@ -89,9 +90,10 @@
     <?php //endif; ?>
 
     <!-- my javascript -->
-     <script src="js/homePage.js"></script>
-     <script src="js/account.js"></script>
+    <script src="js/homePage.js"></script>
+    <script src="js/account.js"></script>
     <script src="js/note_board.js"></script>
     <script src="js/shareWithMe.js"></script>
+    <script src="js/noteEditor.js"></script>
 </body>
 </html>
