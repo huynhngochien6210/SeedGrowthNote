@@ -1,0 +1,14 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Composer dependencies
+/vendor/
+
+# IDE
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
