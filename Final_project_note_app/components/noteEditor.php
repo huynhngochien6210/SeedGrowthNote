@@ -135,3 +135,77 @@
     </div>
 
 </div>
+
+<!-- ===================================== -->
+<!-- NOTE ATTACHMENTS SIDE PANEL           -->
+<!-- ===================================== -->
+
+<aside id="noteAttachmentsPanel" class="ne-attachments">
+
+    <div class="ne-attachments-header">
+        <div class="ne-heading">
+            <i class="bi bi-paperclip"></i>
+            <span>Attachments</span>
+        </div>
+
+        <button
+            type="button"
+            id="neCloseAttachments"
+            class="ne-close-btn"
+            aria-label="Close attachments"
+        >
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    <!-- Drag and Drop -->
+    <div
+        class="ne-dropzone"
+        id="neDropzone"
+        role="button"
+        tabindex="0"
+    >
+        <i class="bi bi-cloud-arrow-up"></i>
+        <strong>Drag & drop files here</strong>
+        <small>or click to upload</small>
+    </div>
+
+    <input
+        type="file"
+        id="neFileInput"
+        multiple
+        hidden
+    >
+
+    <div id="neAttachmentList" class="ne-file-list"></div>
+
+    <!-- Labels: Display only -->
+    <div class="ne-section">
+        <div class="ne-heading">
+            <i class="bi bi-tag"></i>
+            <span>Labels</span>
+        </div>
+
+        <div id="neLabels" class="ne-label-list">
+            <span class="ne-empty">No labels</span>
+        </div>
+    </div>
+
+    <!-- Note Info -->
+    <div class="ne-section">
+        <div class="ne-heading">
+            <i class="bi bi-info-circle"></i>
+            <span>Note Info</span>
+        </div>
+
+        <div class="ne-info-row">
+            <i class="bi bi-calendar3"></i>
+            <span>Created: <time id="neCreated">Today</time></span>
+        </div>
+
+        <div class="ne-info-row">
+            <i class="bi bi-pencil"></i>
+            <span>Updated: <time id="neUpdated">Today</time></span>
+        </div>
+    </div>
+</aside>

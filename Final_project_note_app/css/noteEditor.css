@@ -752,3 +752,264 @@ body.dark-mode .note-toolbar {
 body.dark-mode .note-toolbar button {
     color: #e7eee8;
 }
+
+/* =========================================
+   NOTE EDITOR - ATTACHMENTS EXTENSION
+========================================= */
+
+/* Editor and attachments share one workspace */
+
+#noteEditorWorkspace {
+    display: none;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+    gap: 12px;
+    padding: 12px;
+    height: calc(100vh - 90px);
+    box-sizing: border-box;
+}
+
+#noteEditorWorkspace.ne-open {
+    display: flex;
+}
+
+#noteEditorWorkspace #noteEditorPanel {
+    display: flex;
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#noteEditorWorkspace #noteEditorPanel > .note-editor-panel {
+    height: 100%;
+}
+
+/* ===== Right Panel ===== */
+
+.ne-attachments {
+    flex: 0 0 265px;
+    width: 265px;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    padding: 15px;
+    box-sizing: border-box;
+
+    background: linear-gradient(135deg, #f7fff1, #edf7e5);
+    color: #224924;
+    border-radius: 22px;
+    border: 1px solid #c1d8b7;
+    overflow-y: auto;
+}
+
+.ne-attachments[hidden] {
+    display: none !important;
+}
+
+/* ===== Header ===== */
+
+.ne-attachments-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #c6dabd;
+}
+
+.ne-heading {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.ne-heading i {
+    font-size: 18px;
+}
+
+.ne-close-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.ne-close-btn:hover {
+    background: #dcefd2;
+}
+
+/* ===== Upload ===== */
+
+.ne-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    min-height: 95px;
+    padding: 12px;
+    border: 1.5px dashed #a8c79e;
+    border-radius: 13px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.ne-dropzone:hover,
+.ne-dropzone.dragging {
+    background: #dcefd4;
+    border-color: #548e48;
+}
+
+.ne-dropzone i {
+    font-size: 27px;
+}
+
+.ne-dropzone strong {
+    font-size: 11px;
+}
+
+.ne-dropzone small {
+    font-size: 10px;
+    color: #657965;
+}
+
+/* ===== File List ===== */
+
+.ne-file-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.ne-file {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border: 1px solid #d5e5cd;
+    border-radius: 10px;
+    background: #ffffff99;
+}
+
+.ne-file-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+}
+
+.ne-file-remove {
+    border: none;
+    background: transparent;
+    color: #a34343;
+    cursor: pointer;
+}
+
+/* ===== Labels ===== */
+
+.ne-section {
+    border-top: 1px solid #bfd4b5;
+    padding-top: 12px;
+}
+
+.ne-label-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 11px;
+}
+
+.ne-label {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: #c9eab5;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.ne-empty {
+    font-size: 12px;
+    color: #788775;
+}
+
+/* ===== Note Info ===== */
+
+.ne-info-row {
+    display: flex;
+    gap: 9px;
+    align-items: center;
+    margin-top: 9px;
+    font-size: 11px;
+}
+
+/* ===== Reopen Button ===== */
+
+.ne-reopen {
+    margin-left: auto;
+    padding: 6px 10px;
+    border: 1px solid #a3c997;
+    background: #e3f2db;
+    border-radius: 10px;
+    color: #245127;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.ne-reopen[hidden] {
+    display: none !important;
+}
+
+/* ===== Dark Mode ===== */
+
+body.dark-mode .ne-attachments {
+    background: #26432d;
+    color: #eef9e9;
+    border-color: #57775d;
+}
+
+body.dark-mode .ne-file {
+    background: #355640;
+    border-color: #668569;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 1000px) {
+    .ne-attachments {
+        flex-basis: 230px;
+        width: 230px;
+    }
+}
+
+@media (max-width: 768px) {
+    #noteEditorWorkspace {
+        flex-direction: column;
+        height: auto;
+    }
+
+    #noteEditorWorkspace #noteEditorPanel {
+        flex: 1 1 auto;
+        height: 60vh;
+        min-height: 350px;
+    }
+
+    .ne-attachments {
+        flex: 0 0 auto;
+        width: 100%;
+        max-height: 350px;
+    }
+}
