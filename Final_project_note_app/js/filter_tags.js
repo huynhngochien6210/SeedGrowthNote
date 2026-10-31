@@ -1,3 +1,4 @@
+
 (() => {
     'use strict';
 
@@ -17,7 +18,7 @@
 
         if (!toggle || !panel) {
             console.warn(
-                '[Filter Tags] Missing Filter Tags panel or sidebar button.'
+                '[Filter Tags] Missing panel or sidebar button.'
             );
             return;
         }
@@ -29,18 +30,29 @@
 
         panel.id = 'filterTagsPanel';
 
-        const board = document.getElementById('noteBoardView');
-        const sharedBoard = document.getElementById('sharedBoardView');
+        const closeButton =
+            document.getElementById('closeFilterTagsBtn');
+
+        const board =
+            document.getElementById('noteBoardView');
+
+        const sharedBoard =
+            document.getElementById('sharedBoardView');
 
         function isPanelOpen() {
-            return !panel.hidden && !panel.classList.contains('d-none');
+            return !panel.hidden &&
+                !panel.classList.contains('d-none');
         }
 
         function setPanel(open) {
             panel.hidden = !open;
             panel.classList.toggle('d-none', !open);
 
-            toggle.setAttribute('aria-expanded', String(open));
+            toggle.setAttribute(
+                'aria-expanded',
+                String(open)
+            );
+
             toggle.classList.toggle('is-active', open);
 
             if (open) {
@@ -54,33 +66,82 @@
             }
         }
 
-        // Open / close Filter Tags panel
+        // Toggle Filter Tags
         toggle.addEventListener('click', event => {
             event.preventDefault();
             setPanel(!isPanelOpen());
         });
 
-        // Keyboard accessibility
+        // Close using X
+        closeButton?.addEventListener('click', event => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            setPanel(false);
+            toggle.focus();
+        });
+
+        // Close when clicking outside panel
+        document.addEventListener('click', event => {
+            if (!isPanelOpen()) return;
+
+            if (
+                panel.contains(event.target) ||
+                toggle.contains(event.target)
+            ) {
+                return;
+            }
+
+            // Do not close while using Bootstrap modals
+            if (
+                event.target.closest(
+                    '#filterTagModal, #deleteFilterTagModal, .modal-backdrop'
+                )
+            ) {
+                return;
+            }
+
+            if (
+                document.querySelector(
+                    '#filterTagModal.show, #deleteFilterTagModal.show'
+                )
+            ) {
+                return;
+            }
+
+            setPanel(false);
+        });
+
+        // Keyboard support
         toggle.addEventListener('keydown', event => {
-            if (event.key === 'Enter' || event.key === ' ') {
+            if (
+                event.key === 'Enter' ||
+                event.key === ' '
+            ) {
                 event.preventDefault();
                 setPanel(!isPanelOpen());
             }
         });
 
-        // Close panel when navigating elsewhere
+        // Close when opening Shared
         document.getElementById('shareWithBtn')
             ?.addEventListener('click', () => setPanel(false));
 
+        // Close when navigating to another panel
         document.querySelectorAll('.nav-panel-btn')
             .forEach(button => {
-                button.addEventListener('click', () => setPanel(false));
+                button.addEventListener(
+                    'click',
+                    () => setPanel(false)
+                );
             });
 
         setPanel(isPanelOpen());
-
         initTagManager(panel, board);
     }
+
+
+    /* ===== Tag Management ===== */
 
     function initTagManager(panel, board) {
         const items = panel.querySelector('#filterTagItems');
@@ -89,16 +150,21 @@
         const message = panel.querySelector('#filterTagsMessage');
 
         if (!items || !allButton || !addButton) {
-            console.warn(
-                '[Filter Tags] Missing tag controls.'
-            );
+            console.warn('[Filter Tags] Missing tag controls.');
             return;
         }
 
-        const input = document.getElementById('filterTagInput');
-        const form = document.getElementById('filterTagForm');
-        const modalTitle = document.getElementById('filterTagModalTitle');
-        const error = document.getElementById('filterTagError');
+        const input =
+            document.getElementById('filterTagInput');
+
+        const form =
+            document.getElementById('filterTagForm');
+
+        const modalTitle =
+            document.getElementById('filterTagModalTitle');
+
+        const error =
+            document.getElementById('filterTagError');
 
         const confirmDeleteButton =
             document.getElementById('confirmDeleteFilterTag');
@@ -118,7 +184,7 @@
 
         let tags = [];
 
-        // Load tags from localStorage
+        // Load stored tags
         try {
             const data = JSON.parse(
                 localStorage.getItem(storageKey) || '[]'
@@ -185,7 +251,9 @@
                 `tag-${Date.now()}-${Math.random().toString(36).slice(2)}`;
         }
 
-        // Filter notes by selected tag
+
+        /* ===== Filter Notes ===== */
+
         function filterNotes() {
             if (board) {
                 board.querySelectorAll('.note-card')
@@ -219,7 +287,9 @@
                 });
         }
 
-        // Add or rename a tag
+
+        /* ===== Add / Rename Tag ===== */
+
         function insertTag(name) {
             const value = normalized(name);
 
@@ -257,7 +327,6 @@
             return null;
         }
 
-        // Open add / edit dialog
         function openEditor(id = null) {
             editingId = id;
 
@@ -265,6 +334,7 @@
                 item => item.id === id
             );
 
+            // Fallback without Bootstrap modal
             if (!editorModal || !form || !input) {
                 const value = window.prompt(
                     tag ? 'Đổi tên tag:' : 'Tên tag mới:',
@@ -300,7 +370,9 @@
             editorModal.show();
         }
 
-        // Delete selected tag
+
+        /* ===== Delete Tag ===== */
+
         function doDelete() {
             tags = tags.filter(
                 tag => tag.id !== deletingId
@@ -332,7 +404,9 @@
             }
         }
 
-        // Render tag list
+
+        /* ===== Render Tags ===== */
+
         function render() {
             items.replaceChildren();
 
@@ -399,19 +473,19 @@
             filterNotes();
         }
 
-        // Add tag button
+
+        /* ===== Event Listeners ===== */
+
         addButton.addEventListener(
             'click',
             () => openEditor()
         );
 
-        // Show all notes
         allButton.addEventListener('click', () => {
             selectedId = null;
             filterNotes();
         });
 
-        // Submit add / edit form
         form?.addEventListener('submit', event => {
             event.preventDefault();
 
@@ -428,16 +502,18 @@
             }
         });
 
-        // Confirm delete
         confirmDeleteButton?.addEventListener(
             'click',
             doDelete
         );
 
-        // Refresh filter when note cards change
+        // Refilter when notes are added/removed
         const grid = document.getElementById('noteGrid');
 
-        if (grid && typeof MutationObserver !== 'undefined') {
+        if (
+            grid &&
+            typeof MutationObserver !== 'undefined'
+        ) {
             new MutationObserver(filterNotes).observe(
                 grid,
                 { childList: true }
@@ -447,7 +523,9 @@
         render();
     }
 
-    // Initialize when DOM is ready
+
+    /* ===== Initialize ===== */
+
     if (document.readyState === 'loading') {
         document.addEventListener(
             'DOMContentLoaded',

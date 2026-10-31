@@ -1,57 +1,98 @@
-function renderSharedNote(data){
-    const template= document.getElementById('sharedNoteTemplate');
-    const clone= template.content.cloneNode(true);
-    const card= clone.querySelector('.shared-note-card');
 
-    card.querySelector('.shared-note-title').textContent= data.title || 'Untitile';
+/* ===== Render Shared Note ===== */
 
-    // Ngày nhận — chỉ hiện nếu có dữ liệu thật
-    const receivedEl = card.querySelector('.shared-note-received');
+function renderSharedNote(data) {
+    const template =
+        document.getElementById('sharedNoteTemplate');
+
+    const clone = template.content.cloneNode(true);
+    const card = clone.querySelector('.shared-note-card');
+
+    card.querySelector('.shared-note-title').textContent =
+        data.title || 'Untitled';
+
+    const receivedEl =
+        card.querySelector('.shared-note-received');
+
     if (data.receivedDate) {
-        receivedEl.textContent = `Recieved : ${data.receivedDate}`;
+        receivedEl.textContent =
+            `Received: ${data.receivedDate}`;
     } else {
-        receivedEl.remove();   // không có dữ liệu → xoá hẳn khỏi DOM, không để trống rỗng
+        receivedEl.remove();
     }
 
-    // Người share — chỉ hiện nếu có email
-    const sharerEl = card.querySelector('.shared-note-sharer');
+    const sharerEl =
+        card.querySelector('.shared-note-sharer');
+
     if (data.sharerEmail) {
-        sharerEl.querySelector('.sharer-email').textContent = data.sharerEmail;
+        sharerEl.querySelector('.sharer-email').textContent =
+            data.sharerEmail;
     } else {
         sharerEl.remove();
     }
 
-    // Quyền read-only / editable — chỉ hiện nếu đã xác định
-    const permissionEl = card.querySelector('.shared-note-permission');
+    const permissionEl =
+        card.querySelector('.shared-note-permission');
+
     if (data.permission === 'read-only') {
         permissionEl.classList.add('read-only');
-        permissionEl.querySelector('i').className = 'bi bi-eye';
-        permissionEl.querySelector('.permission-label').textContent = 'Read-only';
+
+        permissionEl.querySelector('i').className =
+            'bi bi-eye';
+
+        permissionEl.querySelector('.permission-label')
+            .textContent = 'Read-only';
+
     } else if (data.permission === 'editable') {
         permissionEl.classList.add('editable');
-        permissionEl.querySelector('i').className = 'bi bi-pencil';
-        permissionEl.querySelector('.permission-label').textContent = 'Editable';
+
+        permissionEl.querySelector('i').className =
+            'bi bi-pencil';
+
+        permissionEl.querySelector('.permission-label')
+            .textContent = 'Editable';
+
     } else {
         permissionEl.remove();
     }
 
-    // Nếu KHÔNG có bất kỳ field thông tin nào cả → card rơi về dạng minimal (chỉ icon)
-    if (!data.receivedDate && !data.sharerEmail && !data.permission) {
+    if (
+        !data.receivedDate &&
+        !data.sharerEmail &&
+        !data.permission
+    ) {
         card.classList.add('is-minimal');
     }
 
     return card;
 }
 
+
+/* ===== Load Shared Notes ===== */
+
 async function loadSharedNotes() {
     const grid = document.getElementById('sharedGrid');
+
+    if (!grid) return;
+
     grid.innerHTML = '';
 
-    // Dữ liệu giả để test giao diện — sau này thay bằng gọi API thật
+    // Mock data, replace with API when backend is ready
     const notes = [
-        { title: 'Machine Learning', receivedDate: '19/8/2026', sharerEmail: 'a@gmail.com', permission: 'read-only' },
-        { title: 'Project Plan', sharerEmail: 'b@gmail.com', permission: 'editable' },
-        { title: 'Random note' }
+        {
+            title: 'Machine Learning',
+            receivedDate: '19/8/2026',
+            sharerEmail: 'a@gmail.com',
+            permission: 'read-only'
+        },
+        {
+            title: 'Project Plan',
+            sharerEmail: 'b@gmail.com',
+            permission: 'editable'
+        },
+        {
+            title: 'Random note'
+        }
     ];
 
     notes.forEach(note => {
@@ -60,47 +101,92 @@ async function loadSharedNotes() {
     });
 }
 
-// Bấm mở shared with me
-document.addEventListener('DOMContentLoaded', ()=> {
-    const sharedBtn= document.getElementById('shareWithBtn');
-    const noteBoardView= document.getElementById('noteBoardView');
-    const sharedBoardView= document.getElementById('sharedBoardView');
 
-    if(!sharedBtn || !noteBoardView || !sharedBoardView) return;
+/* ===== Shared Panel Navigation ===== */
 
-    function isSharedViewOpen(){
-        return !sharedBoardView.classList.contains('d-none');
+document.addEventListener('DOMContentLoaded', () => {
+
+    const sharedBtn =
+        document.getElementById('shareWithBtn');
+
+    const noteBoard =
+        document.getElementById('noteBoardView');
+
+    const sharedBoard =
+        document.getElementById('sharedBoardView');
+
+    if (!sharedBtn || !noteBoard || !sharedBoard) {
+        return;
     }
 
-    function openSharedView(){
-        noteBoardView.classList.add('d-none');
-        sharedBoardView.classList.remove('d-none');
-        loadSharedNotes();
+    function isOpen() {
+        return !sharedBoard.classList.contains('d-none');
     }
 
-    function closeSharedView(){
-        noteBoardView.classList.remove('d-none');
-        sharedBoardView.classList.add('d-none');
-    }
+    function setSharedView(open) {
+        sharedBoard.classList.toggle('d-none', !open);
+        noteBoard.classList.toggle('d-none', open);
 
-    sharedBtn.addEventListener('click', (e)=> {
-        e.stopPropagation();
-        if(isSharedViewOpen()){
-            closeSharedView();
-        }else{
-            openSharedView();
+        // Close Account / Password
+        document.querySelectorAll('.app-panel.active')
+            .forEach(panel => {
+                panel.classList.remove('active');
+            });
+
+        document.querySelector('.app-sidebar')
+            ?.classList.remove('show');
+
+        if (open) {
+            loadSharedNotes();
         }
-    })
+    }
 
-    document.addEventListener('click', (e) =>{
-        if(!isSharedViewOpen()) return;
+    // Toggle Shared with me
+    sharedBtn.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
 
-        const clickInsideSharedBoard= sharedBoardView.contains(e.target);
-        const clickOnShareBtn= sharedBtn.contains(e.target);
+        const opening = !isOpen();
 
-        if(!clickInsideSharedBoard && !clickOnShareBtn){
-            closeSharedView();
+        const filterPanel =
+            document.getElementById('filterTagsPanel');
+
+        if (filterPanel) {
+            filterPanel.hidden = true;
+            filterPanel.classList.add('d-none');
+
+            const filterBtn =
+                document.getElementById('filterTagsBtn');
+
+            filterBtn?.setAttribute(
+                'aria-expanded',
+                'false'
+            );
+
+            filterBtn?.classList.remove('is-active');
         }
-    })
-})
 
+        setSharedView(opening);
+    });
+
+    // Close Shared when clicking outside
+    document.addEventListener('click', event => {
+        if (
+            !isOpen() ||
+            sharedBoard.contains(event.target) ||
+            sharedBtn.contains(event.target)
+        ) {
+            return;
+        }
+
+        if (
+            event.target.closest(
+                '.nav-panel-btn, #filterTagsBtn'
+            )
+        ) {
+            return;
+        }
+
+        setSharedView(false);
+    });
+});
