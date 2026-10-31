@@ -45,6 +45,7 @@
     <link rel="stylesheet" href="css/shareNote.css">
     <link rel="stylesheet" href="css/ai.css">
     <link rel="stylesheet" href="css/noteEditor.css">
+    <link rel="stylesheet" href="css/filter_tags.css">
 
     <!-- css login -->
     <?php // if ($page === 'login'): ?>
@@ -85,7 +86,7 @@
                 <!-- Import note board -->
                 <?php include 'components/note_board.php';?>
                 <!-- Import shared with me -->
-                <?php //include 'components/shareWithMe.php'; ?>
+                <?php include 'components/shareWithMe.php'; ?>
 
                 <?php include 'components/ai-assistant.php'; ?>
             

@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
     function openSharedView(){
         noteBoardView.classList.add('d-none');
         sharedBoardView.classList.remove('d-none');
-        loadShareNotes();
+        loadSharedNotes();
     }
 
     function closeSharedView(){
