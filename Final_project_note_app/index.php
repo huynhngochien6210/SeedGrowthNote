@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="css/darkMode&Respon.css">
     <link rel="stylesheet" href="css/homePage.css">
     <link rel="stylesheet" href="css/note_board.css">
+    <link rel="stylesheet" href="css/filter_tags.css">
     <link rel="stylesheet" href="css/account.css">
     <link rel="stylesheet" href="css/password.css">
     <link rel="stylesheet" href="css/verify_email_toast.css">
@@ -76,7 +77,7 @@
                 <!-- Import password -->
                 <?php include 'components/password.php'; ?>
                 <!-- Import verify_email_toast -->
-                <?php include 'components/verify_email_toast.php'; ?>
+                <?php //include 'components/verify_email_toast.php'; ?>
                 <!-- Import filter tags -->
                 <?php include 'components/filter_tags.php'; ?>
 

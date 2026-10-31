@@ -1,270 +1,199 @@
-/* TRANG */
-/* ===== Account ===== */
-
-.account-page-wrap{
+/* SeedGrowthNote — Account panel, scoped styles */
+.account-page-wrap.app-panel {
     width: 100%;
+    min-width: 0;
+    flex: 1 1 0;
+    padding: 24px;
+    box-sizing: border-box;
 }
 
-/* Card bao ngoài, bo góc giống app-header */
-.account-card{
-    background-color: #f9f5ea;
-    border-radius: 40px;
+.account-page-wrap .account-card {
+    width: 100%;
+    max-width: 1100px;
+    min-width: 0;
+    min-height: 0;
+    margin: 0 auto;
+    border-radius: 30px;
+    background: #f9f5ea;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    max-width: 1400px;
-    min-height:600px;
-    margin:auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,.15);
 }
 
-.account-side{
-    background-color: rgba(26, 58, 26, 0.75);
+.account-page-wrap .account-side {
+    background: rgba(26,58,26,.75);
     backdrop-filter: blur(10px);
-    color: #ffffff;
-    min-width: 450px;
+    color: #fff;
+    width: 34%;
+    min-width: 220px;
+    flex: 0 0 34%;
+    padding: 60px 20px 28px !important;
 }
 
-.avatar-circle{
+.account-page-wrap .avatar-circle {
     position: relative;
-    width: 124px;
-    height: 124px;
-    font-size: 3.8rem;
+    width: 108px;
+    height: 108px;
+    flex: none;
     border-radius: 50%;
-    background-color: #ffffff;
+    background: #fff;
     color: #8bccaa;
+    font-size: 3.4rem;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
-.avatar-edit-btn{
+.account-page-wrap .avatar-edit-btn {
     position: absolute;
-    right: -2px;
-    bottom: -2px;
-    width: 48px;
-    height: 48px;
-    font-size: 1.8rem;
+    right: -3px;
+    bottom: -3px;
+    width: 42px;
+    height: 42px;
+    border: 0;
     border-radius: 50%;
-    border: none;
-    background-color: #8bccaa;
+    background: #8bccaa;
     color: #254f22;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
+    font-size: 1.45rem;
 }
 
-/* Menu dọc bên trái, có đường nối + chấm tròn */
-.account-menu{
+.account-page-wrap .account-menu {
+    width: min(100%, 260px) !important;
     position: relative;
-    margin-left: 1.25rem;
-    padding-left: 1rem;
-    text-align:left;
+    text-align: left;
+    padding-left: 22px;
+    margin: 6px 0 0 12px;
 }
 
-.account-menu::before{
-    content: "";
+.account-page-wrap .account-menu::before {
+    content: '';
     position: absolute;
-    left: 4px;
-    top: 6px;
-    bottom: 6px;
+    left: 6px;
+    top: 12px;
+    bottom: 12px;
     width: 2px;
-    background-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255,255,255,.45);
 }
 
-.account-menu-item{
-    position: relative;
-    padding: 12px;   /*sửa lại từ 0.8rem -> 12px*/
-}
-
-.account-menu-dot{
+.account-page-wrap .account-menu-item { position: relative; padding: 11px 6px; }
+.account-page-wrap .account-menu-dot {
     position: absolute;
-    left: -1.5rem;  /* sửa lại: -1.2 -> -1.5 cho nó ngay chính giữa đường thẳng*/
-    top: 1.1rem;    /*size dot đc chỉnh to hơn*/
-    width: 25px;
-    height: 25px;
+    left: -22px;
+    top: 16px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.6);
+    background: rgba(255,255,255,.65);
 }
-
-.account-menu-item.active .account-menu-dot{
-    background-color: #8ce41d;
-}
-
-.account-menu-item a{
-    color: rgba(255, 255, 255, 0.8);
+.account-page-wrap .account-menu-item.active .account-menu-dot { background: #8ce41d; }
+.account-page-wrap .account-menu-item a {
+    color: rgba(255,255,255,.85);
+    font-size: 1rem;
     text-decoration: none;
-    font-size: 1.5rem;
-
 }
+.account-page-wrap .account-menu-item.active a { color: white; font-weight: 700; }
+.account-page-wrap .account-menu-item.logout a { color: #ff8a8a; }
+.account-page-wrap .account-menu-item a:hover { color: white; }
 
-.account-menu-item.active a{
-    color: #ffffff;
-    font-weight: 700;
-}
-
-.account-menu-item.logout a{
-    color: #ff8a8a;
-}
-
-.account-menu-item a:hover{
-    color: #ffffff;
-}
-
-/* Nút quay lại panel Notes, đặt góc trên-trái của mỗi panel */
-.panel-back-btn{
+.account-page-wrap .panel-back-btn {
     position: absolute;
-    top: 1rem;
-    left: 1rem;
-    width: 56px;
-    height: 56px;
-    border: none;
+    top: 12px;
+    left: 12px;
+    z-index: 5;
+    width: 43px;
+    height: 43px;
+    padding: 0;
+    border: 0;
     border-radius: 50%;
-    background-color: rgba(37, 79, 34, 0.1);
+    background: rgba(37,79,34,.2);
     color: #e7efe7;
+    font-size: 1.8rem;
+    display: grid;
+    place-items: center;
+}
+.account-page-wrap .panel-back-btn:hover { background: rgba(74,159,67,.4); }
+
+.account-page-wrap .account-main {
+    background: #f9f5ea;
+    min-width: 0;
+    padding: 74px 30px 34px !important;
+}
+.account-page-wrap .edit-profile-btn {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    max-width: calc(100% - 48px);
+    border: 0;
+    border-radius: 99px;
+    padding: 8px 17px;
+    background: #254f22;
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 650;
+}
+.account-page-wrap .edit-profile-btn:hover { background: #8bccaa; color: #254f22; }
+.account-page-wrap .account-username {
+    color: #254f22;
+    font-size: clamp(1.3rem, 2.3vw, 1.85rem);
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+.account-page-wrap .account-subtitle {
+    color: rgba(37,79,34,.65);
+    font-size: 1rem;
+}
+.account-page-wrap .account-field-label {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 2.35rem;
-    transition: background 0.2s ease;
-    z-index: 5;
-}
-
-.panel-back-btn:hover{
-    background-color: rgba(74, 159, 67, 0.2);
-
-}
-
-body.dark-mode .panel-back-btn{
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-}
-
-body.dark-mode .panel-back-btn:hover{
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-/* Cột phải: thông tin tài khoản */
-.account-main{
-    background-color: #f9f5ea;
-}
-
-.edit-profile-btn{
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    border: none;
-    border-radius: 999px;
-    padding: 0.4rem 1.1rem;
-    background-color: #254f22;
-    color: #ffffff;
-    font-size: 2.1rem;
-    font-weight: 600;
-    transition: background 0.2s ease;
-}
-
-.edit-profile-btn:hover{
-    background-color: #8bccaa;
+    gap: 8px;
     color: #254f22;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    overflow-wrap: anywhere;
 }
-
-.account-username{
-    color: #254f22;
-    font-weight: 800;
-    letter-spacing: 0.02em;
-}
-
-.account-subtitle{
-    color: rgba(37, 79, 34, 0.6);
-    font-size: 2.1rem;
-}
-
-.account-field-label{
-    display: block;
-    color: #254f22;
-    font-size: 2.1rem;
-    font-weight: 600;
-    margin-bottom: 0.35rem;
-}
-
-.account-field-label i{
-    color: #8ce41d;
-    margin-right: 0.35rem;
-
-}
-
-.account-field-input{
+.account-page-wrap .account-field-label i { color: #75c70c; font-size: 1.2rem; }
+.account-page-wrap .account-field-input {
     width: 100%;
-    border: none;
-    border-bottom: 2px solid rgba(37, 79, 34, 0.3);
+    max-width: 100%;
+    min-width: 0;
+    border: 0;
+    border-bottom: 1.5px solid rgba(37,79,34,.3);
+    border-radius: 0;
     background: transparent;
     color: #254f22;
-    padding: 0.25rem 0.1rem;
-    font-size: 2.2rem;
+    padding: 7px 2px;
+    font-size: 1rem;
+    text-overflow: ellipsis;
 }
+.account-page-wrap .account-field-input:focus { outline: none; border-bottom-color: #254f22; }
+.account-page-wrap .account-field-input[readonly] { color: rgba(37,79,34,.75); }
 
-.account-field-input:focus{
-    outline: none;
-    border-bottom-color: #254f22;
+body.dark-mode .account-page-wrap .account-card,
+body.dark-mode .account-page-wrap .account-main { background: #162b20; }
+body.dark-mode .account-page-wrap .account-username,
+body.dark-mode .account-page-wrap .account-field-label { color: #fff; }
+body.dark-mode .account-page-wrap .account-subtitle { color: rgba(255,255,255,.6); }
+body.dark-mode .account-page-wrap .account-field-input { color: #fff; border-bottom-color: rgba(255,255,255,.3); }
+body.dark-mode .account-page-wrap .edit-profile-btn { background: #d3ba14; color: #172820; }
+
+@media (max-width: 950px) {
+    .account-page-wrap.app-panel { padding: 16px; }
+    .account-page-wrap .account-side { width: 35%; min-width: 190px; flex-basis: 35%; }
+    .account-page-wrap .account-main { padding: 72px 22px 28px !important; }
 }
-
-.account-field-input[readonly]{
-    color: rgba(37, 79, 34, 0.75);
-}
-
-/* ===== Dark mode ===== */
-
-body.dark-mode .account-card{
-    background-color: #162b20;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-}
-
-body.dark-mode .account-main{
-    background-color: #162b20;
-}
-
-body.dark-mode .account-username,
-body.dark-mode .account-field-label{
-    color: #ffffff;
-}
-
-body.dark-mode .account-subtitle{
-    color: rgba(255, 255, 255, 0.6);
-}
-
-body.dark-mode .account-field-input{
-    color: #ffffff;
-    border-bottom-color: rgba(255, 255, 255, 0.3);
-}
-
-body.dark-mode .account-field-input:focus{
-    border-bottom-color: #ffffff;
-}
-
-body.dark-mode .edit-profile-btn{
-    background-color: #d3ba14;
-    color: #ffffff;
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 767.98px){
-
-    .account-card{
-        border-radius: 20px;
+@media (max-width: 767.98px) {
+    .account-page-wrap.app-panel { padding: 12px; }
+    .account-page-wrap .account-card { border-radius: 22px; }
+    .account-page-wrap .account-side {
+        min-width: 0;
+        width: 100%;
+        flex: none;
+        padding: 60px 20px 22px !important;
     }
-
-    .account-side{
-        min-width: 100%;
-    }
-
-    .edit-profile-btn{
-        position: static;
-        margin-bottom: 1rem;
-        display: inline-block;
-    }
-
+    .account-page-wrap .account-main { width: 100%; padding: 70px 22px 28px !important; }
 }
-
-/* ===== Panel switching (Account, Notes, ...) ===== */
-
 .app-panel{
     display: none;
     width: 100%;

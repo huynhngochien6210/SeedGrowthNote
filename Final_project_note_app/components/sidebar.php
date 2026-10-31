@@ -1,6 +1,9 @@
 <!-- Sidebar -->
             <aside class="app-sidebar col-md-1 d-flex flex-column align-items-center py-4 gap-4">
-                <div class="sidebar-icon-item text-center">
+                <div class="sidebar-icon-item text-center"
+                    id="filterTagsBtn"
+                    role="button"
+                    tabindex="0">
                     <i class="bi bi-funnel fs-4"></i>
                     <div class="small">Filter tags</div>
                 </div>
