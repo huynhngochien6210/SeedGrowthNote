@@ -712,20 +712,12 @@ document.addEventListener("DOMContentLoaded", function () {
        21. OPEN NEWLY CREATED NOTE
     ========================================== */
 
-    createButton?.addEventListener("click", function () {
+    document.addEventListener("seedgrowth:note-created", function (event) {
+        const newNote = event.detail?.card;
 
-        // Allow original note_board.js to create the note
-        // before opening its editor.
-        queueMicrotask(function () {
-
-            const newNote = grid?.querySelector(
-                ".new-note-card + .note-card"
-            );
-
-            if (newNote) {
-                openEditor(newNote);
-            }
-        });
+        if (newNote) {
+            openEditor(newNote);
+        }
     });
 
     /* ==========================================
