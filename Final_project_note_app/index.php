@@ -1,6 +1,19 @@
 <?php
-//require_once __DIR__ . '/route.php';
+session_start();
+require_once __DIR__ . '/route.php';
+
+if ($page === 'home' && empty($_SESSION['user_id'])) {
+    header('Location: ?page=login');
+    exit;
+}
+
+if (in_array($page, ['login', 'signup'], true)
+    && !empty($_SESSION['user_id'])) {
+    header('Location: ?page=home');
+    exit;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,28 +59,25 @@
     <link rel="stylesheet" href="css/shareNote.css">
     <link rel="stylesheet" href="css/ai.css">
     <link rel="stylesheet" href="css/noteEditor.css">
-    <link rel="stylesheet" href="css/filter_tags.css">
-
+    <link rel="stylesheet" href="css/noteMenu.css">
     <!-- css login -->
-    <?php // if ($page === 'login'): ?>
-        <!-- <link rel="stylesheet" href="css/login.css"> -->
-    <?php // elseif ($page === 'signup'): ?> 
-        <!-- <link rel="stylesheet" href="css/signup.css"> -->
-    <?php // elseif ($page === 'verify'): ?> 
-        <!-- <link rel="stylesheet" href="css/verify.css"> -->
-    <?php // endif; ?>
+    <?php if ($page === 'login'): ?>
+        <link rel="stylesheet" href="css/login.css">
+    <?php elseif ($page === 'signup'): ?>
+        <link rel="stylesheet" href="css/signup.css">
+    <?php elseif ($page === 'verify'): ?>
+        <link rel="stylesheet" href="css/verify.css">
+    <?php endif; ?>
 
     <title>Seedgrowthnote</title>
 </head>
 
 <body>
-    <?php //if ($page === 'login'): ?>
+    <?php if (in_array($page, ['login', 'signup', 'verify'], true)): ?>
+        <?php include 'components/hero.php'; ?>
+        <?php include 'components/blurBG.php'; ?>
+    <?php else: ?>
 
-        <?php //include 'components/hero.php'; ?>
-
-        <?php //include 'components/blurBG.php'; ?>
-
-    <?php //else: ?> 
         <!-- Import file header vào -->
         <?php include 'components/header.php'; ?>
 
@@ -105,18 +115,27 @@
         <!-- Import share note -->
         <?php include 'components/shareNote.php'; ?>
 
-    <?php //endif; ?>
+    <?php endif; ?>
 
     <!-- my javascript -->
-     <script src="js/homePage.js"></script>
-     <script src="js/filter_tags.js"></script>
-     <script src="js/account.js"></script>
-     <script src="js/password.js"></script>
-    <script src="js/note_board.js"></script>
-    <script src="js/shareWithMe.js"></script>
-    <script src="js/noteEditor.js"></script>
-    <script src="js/ai.js"></script>
-    <script src="js/script.js"></script>
+    <?php if ($page === 'login'): ?>
+        <script src="js/login.js"></script>
+    <?php elseif ($page === 'signup'): ?>
+        <script src="js/register.js"></script>
+    <?php endif; ?>
+
+    <?php if ($page === 'home'): ?>
+        <script src="js/homePage.js"></script>
+        <script src="js/filter_tags.js"></script>
+        <script src="js/account.js"></script>
+        <script src="js/password.js"></script>
+        <script src="js/note_board.js"></script>
+        <script src="js/shareWithMe.js"></script>
+        <script src="js/noteEditor.js"></script>
+        <script src="js/ai.js"></script>
+        <script src="js/script.js"></script>
+        <script src="js/noteMenu.js"></script>
+    <?php endif; ?>
     <script>
         document.querySelectorAll('.nav-panel-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {

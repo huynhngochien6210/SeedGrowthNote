@@ -1,0 +1,114 @@
+
+/* =========================================
+   SEEDGROWTHNOTE - HOME NOTE MENU
+   ========================================= */
+
+#noteGrid .note-card {
+    position: relative;
+    overflow: visible !important;
+}
+
+#noteGrid .note-card-link {
+    position: relative;
+}
+
+#noteGrid .note-seed-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Three-dot button next to seed */
+#noteGrid .note-menu-trigger {
+    position: absolute;
+    top: 85px;
+    right: 2px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 36px;
+    padding: 0;
+
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 1;
+
+    cursor: pointer;
+    z-index: 100;
+}
+
+#noteGrid .note-menu-trigger:hover,
+#noteGrid .note-menu-trigger[aria-expanded="true"] {
+    color: #c4efb8;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Note context menu */
+#noteGrid .note-context-menu {
+    position: absolute;
+    top: 55px;
+    left: calc(100% - 5px);
+
+    width: 220px;
+    padding: 8px 12px;
+
+    background: #ffffff;
+    border: 3px solid #111111;
+    border-radius: 16px;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    z-index: 1000;
+}
+
+#noteGrid .note-context-menu[hidden] {
+    display: none !important;
+}
+
+#noteGrid .note-context-menu button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    padding: 9px 7px;
+
+    border: none;
+    border-bottom: 1px solid #9eae9c;
+    background: transparent;
+
+    color: #28552f;
+    font-size: 17px;
+    font-weight: 600;
+    text-align: left;
+
+    cursor: pointer;
+}
+
+#noteGrid .note-context-menu button:last-child {
+    border-bottom: none;
+}
+
+#noteGrid .note-context-menu button:hover {
+    background: #e9f2e5;
+    border-radius: 6px;
+}
+
+#noteGrid .note-context-menu .menu-icon {
+    width: 26px;
+    text-align: center;
+    font-size: 20px;
+}
+
+#noteGrid .note-context-menu button[data-action="delete"]:hover {
+    background: #fde8e8;
+    color: #b42323;
+}

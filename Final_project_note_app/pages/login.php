@@ -1,46 +1,69 @@
+
 <div class="login-card">
 
-
-    <!-- Tieu de form -->
+    <!-- Tiêu đề -->
     <h2 class="login-title">
         HELLO
     </h2>
 
-    <form>
+    <!-- Form đăng nhập -->
+    <form id="loginForm">
 
         <!-- Email -->
         <div class="mb-3">
             <input
+                id="loginEmail"
+                name="email"
                 type="email"
                 class="form-control login-input"
-                placeholder="Email">
+                placeholder="Email"
+                autocomplete="email"
+                required
+            >
         </div>
 
         <!-- Password -->
         <div class="mb-3">
             <input
+                id="loginPassword"
+                name="password"
                 type="password"
                 class="form-control login-input"
-                placeholder="Password">
+                placeholder="Password"
+                autocomplete="current-password"
+                required
+            >
         </div>
 
-        <!-- Nut dang nhap -->
+        <!-- Thông báo lỗi -->
+        <div
+            id="loginMessage"
+            class="alert alert-danger mb-3"
+            role="alert"
+            aria-live="polite"
+            style="display: none;"
+        ></div>
+
+        <!-- Nút đăng nhập -->
         <button
+            id="loginButton"
             type="submit"
-            class="btn login-button w-100">
+            class="btn login-button w-100"
+        >
             Sign in
         </button>
 
-        <!-- Reset password -->
+        <!-- Quên mật khẩu -->
         <div class="mt-3">
             <a
                 href="#"
-                class="reset-link">
+                class="reset-link"
+            >
                 Reset password
             </a>
         </div>
 
-        <!-- Sign up -->
+        <!-- Chuyển sang đăng ký -->
         <p class="signup-text">
             Don't have an account?
             <a href="?page=signup">
