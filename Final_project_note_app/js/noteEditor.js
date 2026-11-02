@@ -51,6 +51,9 @@ document.addEventListener("DOMContentLoaded", function () {
     ========================================== */
 
     let currentNote = null;
+    let autoSaveTimer = null;
+    let isSaving = false;
+    let saveAgain = false;
 
     // Temporary files for each note
     const filesByNote = new WeakMap();
@@ -288,63 +291,75 @@ document.addEventListener("DOMContentLoaded", function () {
 
         files.forEach(function (entry) {
 
-            const row = document.createElement("div");
-            row.className = "ne-file";
+            const row = document.createElement('div');
+            row.className = 'ne-file';
 
-            const icon = document.createElement("i");
-            icon.className = "bi " + getFileIcon(entry.file);
-
-            const link = document.createElement("a");
-
-            link.className = "ne-file-name";
-            link.textContent = entry.file.name;
-
-            link.href = entry.url;
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-
-            link.title = entry.file.name;
-
-            const size = document.createElement("small");
-            size.className = "ne-file-size";
-            size.textContent = formatFileSize(entry.file.size);
-
-            const removeButton = document.createElement("button");
-
-            removeButton.type = "button";
-            removeButton.className = "ne-file-remove";
-
-            removeButton.textContent = "✕";
-
-            removeButton.setAttribute(
-                "aria-label",
-                "Remove " + entry.file.name
-            );
-
-            removeButton.addEventListener("click", function () {
-
-                const items = getFiles();
-                const index = items.indexOf(entry);
-
-                if (index !== -1) {
-
-                    items.splice(index, 1);
-
-                    URL.revokeObjectURL(entry.url);
-                    temporaryUrls.delete(entry.url);
-                }
-
-                updateNoteTime();
-                renderFiles();
+            const icon = document.createElement('i');
+            icon.className = 'bi ' + getFileIcon({
+                type: entry.mime_type || ''
             });
+
+            const link = document.createElement('a');
+
+            link.className = 'ne-file-name';
+            link.textContent = entry.file_name;
+
+            link.href = '/' + entry.file_path;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.title = entry.file_name;
+
+            const size = document.createElement('small');
+            size.className = 'ne-file-size';
+            size.textContent = formatFileSize(
+                Number(entry.file_size || 0)
+            );
 
             row.appendChild(icon);
             row.appendChild(link);
             row.appendChild(size);
-            row.appendChild(removeButton);
 
             fileList.appendChild(row);
         });
+    }
+
+    /* ==========================================
+    LOAD ATTACHMENTS FROM DATABASE
+    ========================================== */
+
+    async function loadAttachments() {
+
+        if (!currentNote) return;
+
+        const noteId = currentNote.dataset.noteId;
+
+        try {
+            const response = await fetch(
+                `/api/upload_file/get_attachments.php?note_id=${encodeURIComponent(noteId)}`,
+                {
+                    method: 'GET',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.message || 'Failed to load attachments'
+                );
+            }
+
+            filesByNote.set(currentNote, result.data);
+
+            renderFiles();
+
+        } catch (error) {
+            console.error('Load attachments error:', error);
+        }
     }
 
     /* ==========================================
@@ -368,25 +383,63 @@ document.addEventListener("DOMContentLoaded", function () {
        12. ADD ATTACHMENTS
     ========================================== */
 
-    function addFiles(fileCollection) {
+    async function addFiles(fileCollection) {
 
         if (!currentNote || !fileCollection?.length) {
             return;
         }
 
-        const items = getFiles();
+        const noteId = currentNote.dataset.noteId;
 
-        Array.from(fileCollection).forEach(function (file) {
+        if (!noteId) {
+            alert('Note ID not found');
+            return;
+        }
 
-            const url = URL.createObjectURL(file);
+        for (const file of Array.from(fileCollection)) {
 
-            items.push({
-                file: file,
-                url: url
-            });
+            // Frontend size validation
+            if (file.size > 10 * 1024 * 1024) {
+                alert(`${file.name} exceeds the 10 MB limit.`);
+                continue;
+            }
 
-            temporaryUrls.add(url);
-        });
+            const formData = new FormData();
+
+            formData.append('note_id', noteId);
+            formData.append('attachment', file);
+
+            try {
+                const response = await fetch(
+                    '/api/upload_file/attachments.php',
+                    {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        body: formData
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.message || 'Upload failed'
+                    );
+                }
+
+                // Store uploaded attachment information
+                getFiles().push(result.data);
+
+                console.log('Uploaded:', result.data.file_name);
+
+            } catch (error) {
+                console.error('Upload error:', error);
+
+                alert(
+                    `Could not upload ${file.name}: ${error.message}`
+                );
+            }
+        }
 
         updateNoteTime();
         renderFiles();
@@ -412,11 +465,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        fileInput.addEventListener("change", function () {
+       fileInput.addEventListener("change", async function () {
 
-            addFiles(fileInput.files);
+            const selectedFiles = Array.from(fileInput.files);
 
-            // Allow choosing the same file again
+            await addFiles(selectedFiles);
+
             fileInput.value = "";
         });
     }
@@ -441,13 +495,13 @@ document.addEventListener("DOMContentLoaded", function () {
             dropzone.classList.remove("dragging");
         });
 
-        dropzone.addEventListener("drop", function (event) {
+        dropzone.addEventListener("drop", async function (event) {
 
             event.preventDefault();
 
             dropzone.classList.remove("dragging");
 
-            addFiles(event.dataTransfer?.files);
+            await addFiles(event.dataTransfer?.files);
         });
     }
 
@@ -530,38 +584,156 @@ document.addEventListener("DOMContentLoaded", function () {
        17. SAVE EDITOR DATA TEMPORARILY
     ========================================== */
 
-    function saveEditorData() {
+    /* ==========================================
+   17. UPDATE NOTE
+    ========================================== */
 
-        if (!currentNote) return;
+    function getEditorContent() {
+        const heading = document.createElement('h1');
+        heading.textContent = noteTitle?.value.trim() || '';
 
-        if (noteName) {
+        const wrapper = document.createElement('div');
+        wrapper.appendChild(heading);
 
-            const name = noteName.value.trim();
+        const contentWrapper = document.createElement('div');
+        contentWrapper.innerHTML = noteContent.innerHTML;
 
-            if (name) {
+        while (contentWrapper.firstChild) {
+            wrapper.appendChild(contentWrapper.firstChild);
+        }
 
-                const cardTitle = currentNote.querySelector(
-                    ".note-card-title"
-                );
+        return wrapper.innerHTML;
+    }
 
-                if (cardTitle) {
-                    cardTitle.textContent = name;
-                }
+    async function saveEditorData() {
+
+    if (!currentNote) return false;
+
+    const noteId = currentNote.dataset.noteId;
+    const name = noteName?.value.trim() || '';
+    const content = getEditorContent();
+
+    if (!noteId || !name) {
+        console.error('Missing note ID or note name');
+        return false;
+    }
+
+    // Prevent overlapping requests
+    if (isSaving) {
+        saveAgain = true;
+        return false;
+    }
+
+    isSaving = true;
+
+    try {
+        const response = await fetch('/api/notes/update_note.php', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                note_id: Number(noteId),
+                title: name,
+                content: content
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || 'Failed to update note');
+        }
+
+        // Update card title
+        const cardTitle = currentNote.querySelector('.note-card-title');
+
+        if (cardTitle) {
+            cardTitle.textContent = name;
+        }
+
+        // Update local data
+        currentNote.dataset.editorTitle = name;
+        currentNote.dataset.editorContent = content;
+
+        // Update timestamp from database
+        if (result.data?.updated_at) {
+            const date = new Date(
+                result.data.updated_at.replace(' ', 'T')
+            );
+
+            const formattedDate = date.toLocaleDateString('vi-VN');
+
+            currentNote.dataset.updatedAt = formattedDate;
+
+            if (updatedDate) {
+                updatedDate.textContent = formattedDate;
+            }
+
+            const cardDate = currentNote.querySelector('.note-card-date');
+
+            if (cardDate) {
+                cardDate.textContent = formattedDate;
             }
         }
 
+        console.log('Note saved successfully');
+
+        return true;
+
+        } catch (error) {
+            console.error('Auto-save error:', error);
+            return false;
+
+        } finally {
+            isSaving = false;
+
+            if (saveAgain) {
+                saveAgain = false;
+                scheduleAutoSave();
+            }
+        }
+    }
+
+    function loadEditorContent(html) {
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html || '', 'text/html');
+
+        const heading = doc.querySelector('h1');
+
         if (noteTitle) {
-            currentNote.dataset.editorTitle = noteTitle.value;
+            noteTitle.value = heading?.textContent || '';
         }
 
-        currentNote.dataset.editorContent = noteContent.innerHTML;
+        if (heading) {
+            heading.remove();
+        }
 
-        currentNote.dataset.pinned = String(
-            pinToggle?.checked || false
-        );
-
-        updateNoteTime();
+        noteContent.innerHTML = doc.body.innerHTML;
     }
+
+    function scheduleAutoSave() {
+
+        if (!currentNote) return;
+
+        clearTimeout(autoSaveTimer);
+
+        autoSaveTimer = setTimeout(async function () {
+            await saveEditorData();
+        }, 1000);
+    }
+
+    // Auto-save when note name changes
+    noteName?.addEventListener('input', scheduleAutoSave);
+
+    // Auto-save when heading changes
+    noteTitle?.addEventListener('input', scheduleAutoSave);
+
+    // Auto-save when note content changes
+    noteContent.addEventListener('input', scheduleAutoSave);
 
     /* ==========================================
        18. OPEN NOTE EDITOR
@@ -622,14 +794,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     ?.textContent?.trim() || "New Note";
         }
 
-        // Set note title
-        if (noteTitle) {
-            noteTitle.value = note.dataset.editorTitle || "";
-        }
-
-        // Set note content
-        noteContent.innerHTML =
-            note.dataset.editorContent || "";
+        // Restore heading and note content
+        loadEditorContent(note.dataset.editorContent || '');
 
         // Restore pin toggle
         if (pinToggle) {
@@ -648,20 +814,21 @@ document.addEventListener("DOMContentLoaded", function () {
         // Update sidebar information
         showLabels(note);
         showNoteInfo(note);
-        renderFiles();
+
+        // Load attachments from database
+        loadAttachments();
     }
 
     /* ==========================================
        19. CLOSE NOTE EDITOR
     ========================================== */
 
-    function closeEditor() {
+    async function closeEditor() {
 
         if (!isEditorOpen()) {
             return;
         }
 
-        // Ask before leaving editor
         const confirmed = window.confirm(
             "Leave the note editor?"
         );
@@ -670,22 +837,23 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        saveEditorData();
+        // Save note before leaving
+        const saved = await saveEditorData();
+
+        if (!saved) {
+            return;
+        }
 
         workspace.classList.remove("ne-open");
         editorPanel?.classList.remove("active");
 
-        // Return to Note Board
         board?.classList.remove("d-none");
 
         currentNote = null;
     }
 
-    // Only ONE Back button event
     backButton?.addEventListener("click", function (event) {
-
         event.preventDefault();
-
         closeEditor();
     });
 

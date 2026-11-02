@@ -34,6 +34,7 @@ try {
         FROM notes
         WHERE owner_id = :owner_id
         ORDER BY
+        created_at DESC, id DESC,
             is_pinned DESC,
             pinned_at DESC,
             updated_at DESC

@@ -7,10 +7,9 @@ require_once __DIR__ . '/../../config/database.php';
 header('Content-Type: application/json; charset=utf-8');
 
 try {
-    // Check login session
+    // 1. Check login
     if (!isset($_SESSION['user_id'])) {
         http_response_code(401);
-
         echo json_encode([
             'success' => false,
             'message' => 'User not logged in'
@@ -18,9 +17,19 @@ try {
         exit;
     }
 
+    // 2. Only accept POST
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Method not allowed'
+        ]);
+        exit;
+    }
+
     $userId = $_SESSION['user_id'];
 
-    // Create a new note
+    // 3. Create default note
     $sql = "
         INSERT INTO notes (
             owner_id,
@@ -50,18 +59,13 @@ try {
 
     $noteId = $pdo->lastInsertId();
 
-    // Return newly created note
+    // 4. Get created note
     $stmt = $pdo->prepare("
-        SELECT
-            id,
-            title,
-            content,
-            is_pinned,
-            pinned_at,
-            created_at,
-            updated_at
+        SELECT id, title, content, is_pinned,
+               pinned_at, created_at, updated_at
         FROM notes
-        WHERE id = :id AND owner_id = :owner_id
+        WHERE id = :id
+          AND owner_id = :owner_id
     ");
 
     $stmt->execute([
@@ -69,7 +73,7 @@ try {
         'owner_id' => $userId
     ]);
 
-    $note = $stmt->fetch();
+    $note = $stmt->fetch(PDO::FETCH_ASSOC);
 
     http_response_code(201);
 

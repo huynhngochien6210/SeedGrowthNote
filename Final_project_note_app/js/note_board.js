@@ -63,6 +63,10 @@ viewButtons.forEach(button => {
 
               // Note information
               card.dataset.noteId = note.id;
+              card.dataset.editorTitle = note.title || '';
+              card.dataset.editorContent = note.content || '';
+              card.dataset.pinned = String(note.is_pinned == 1);
+
               link.dataset.noteId = note.id;
 
               title.textContent = note.title || 'Untitled';
