@@ -9,7 +9,25 @@ document.addEventListener('DOMContentLoaded', () =>{
   
   const noteGrid = document.getElementById('noteGrid');
 
-  
+  // Grid / List view
+const viewButtons = document.querySelectorAll('.view-toggle-group-btn');
+
+viewButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const view = button.dataset.view;
+
+        // Update active button
+        viewButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        // Change note layout
+        if (view === 'list') {
+            noteGrid.classList.add('list-view');
+        } else {
+            noteGrid.classList.remove('list-view');
+        }
+    });
+});
 
   // Load notes from database
   async function loadNotes() {

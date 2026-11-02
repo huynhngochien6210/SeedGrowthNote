@@ -53,6 +53,18 @@ window.addEventListener('resize', () => {
     }
 });
 
+/* ===== Initial panel state ===== */
+
+// Mặc định khi tải trang: hiển thị Notes
+document.querySelectorAll('.app-panel').forEach(panel => {
+    panel.classList.remove('active');
+});
+
+document.getElementById('noteBoardView')?.classList.remove('d-none');
+
+document.getElementById('sharedBoardView')?.classList.add('d-none');
+
+document.getElementById('filterTagsPanel')?.classList.add('d-none');
 
 /* ===== Panel navigation ===== */
 

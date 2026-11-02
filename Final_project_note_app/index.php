@@ -92,9 +92,9 @@
                 <?php include 'components/ai-assistant.php'; ?>
             
                 <div
-                class="app-panel active"
+                class="app-panel"
                 data-panel-name="noteEditor"
-                id="noteEditorPanel"
+                id="noteEditorAppPanel"
                 >
                 <?php include __DIR__ . '/components/noteEditor.php'; ?>
                 </div>

@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Workspace
     const workspace = document.getElementById("noteEditorWorkspace");
-    const editorPanel = document.getElementById("noteEditorPanel");
+    const editorPanel = document.getElementById("noteEditorAppPanel");
 
     // Note Board
     const board = document.getElementById("noteBoardView");
