@@ -67,6 +67,17 @@ viewButtons.forEach(button => {
               card.dataset.editorContent = note.content || '';
               card.dataset.pinned = String(note.is_pinned == 1);
 
+              // Identify uploaded file notes
+              const attachment = note.attachments?.[0];
+
+              if (attachment) {
+                  card.dataset.noteType = 'file';
+                  card.dataset.filePath = attachment.file_path;
+                  card.dataset.fileName = attachment.file_name;
+              } else {
+                  card.dataset.noteType = 'text';
+              }
+
               link.dataset.noteId = note.id;
 
               title.textContent = note.title || 'Untitled';
@@ -210,20 +221,108 @@ viewButtons.forEach(button => {
     }
   });
 
-  //Option 2: Upload file
-  btnUploadFile.addEventListener('click', (e) =>{
-    e.stopPropagation();
-    menu.hidden= true;
-    hiddenFileInput.click();
-  })
-  // Khi user da chon xong file
-  hiddenFileInput.addEventListener('change', ()=>{
-    const file= hiddenFileInput.files[0];
-    if(!file) return;
-    console.log('Chose file: ', file.name, file.size, 'bytes');
-    // Todo khi co backend
+  
+  // Option 2: Upload file
+  btnUploadFile.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menu.hidden = true;
+      hiddenFileInput.click();
+  });
 
-    // Reset input để chọn lại cùng 1 file vẫn kích hoạt được sự kiện 'change' lần sau
-    hiddenFileInput.value = '';
-  })
+  // Upload file and create a new Note
+  hiddenFileInput.addEventListener('change', async () => {
+      const file = hiddenFileInput.files[0];
+
+      if (!file) return;
+
+      try {
+          // Check file size (10MB)
+          if (file.size > 10 * 1024 * 1024) {
+              throw new Error('File size must not exceed 10MB.');
+          }
+
+          // Step 1: Create a new Note
+          const createResponse = await fetch(
+              '/api/notes/create_note.php',
+              {
+                  method: 'POST',
+                  credentials: 'same-origin',
+                  headers: {
+                      'Accept': 'application/json'
+                  }
+              }
+          );
+
+          const createResult = await createResponse.json();
+
+          if (!createResponse.ok || !createResult.success) {
+              throw new Error(
+                  createResult.message || 'Failed to create Note'
+              );
+          }
+
+          const noteId = createResult.data.id;
+
+          // Step 2: Set Note title to file name
+          const updateResponse = await fetch(
+              '/api/notes/update_note.php',
+              {
+                  method: 'POST',
+                  credentials: 'same-origin',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json'
+                  },
+                  body: JSON.stringify({
+                      note_id: noteId,
+                      title: file.name,
+                      content: ''
+                  })
+              }
+          );
+
+          const updateResult = await updateResponse.json();
+
+          if (!updateResponse.ok || !updateResult.success) {
+              throw new Error(
+                  updateResult.message || 'Failed to update Note'
+              );
+          }
+
+          // Step 3: Upload file to Attachments
+          const formData = new FormData();
+
+          formData.append('note_id', noteId);
+          formData.append('attachment', file);
+
+          const uploadResponse = await fetch(
+              '/api/upload_file/attachments.php',
+              {
+                  method: 'POST',
+                  credentials: 'same-origin',
+                  body: formData
+              }
+          );
+
+          const uploadResult = await uploadResponse.json();
+
+          if (!uploadResponse.ok || !uploadResult.success) {
+              throw new Error(
+                  uploadResult.message || 'Failed to upload file'
+              );
+          }
+
+          // Step 4: Reload Note Board
+          await loadNotes();
+
+          alert('File uploaded successfully!');
+
+      } catch (error) {
+          console.error('Upload file error:', error);
+          alert('Upload failed: ' + error.message);
+
+      } finally {
+          hiddenFileInput.value = '';
+      }
+  });
 })

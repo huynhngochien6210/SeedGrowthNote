@@ -861,6 +861,7 @@ document.addEventListener("DOMContentLoaded", function () {
        20. OPEN AN EXISTING NOTE
     ========================================== */
 
+    
     grid?.addEventListener("click", function (event) {
 
         const link = event.target.closest(".note-card-link");
@@ -873,8 +874,35 @@ document.addEventListener("DOMContentLoaded", function () {
 
         event.preventDefault();
 
+        // Check whether this is an uploaded File Note
+        if (note.dataset.noteType === "file") {
+
+            const filePath = note.dataset.filePath;
+            const fileName = note.dataset.fileName;
+
+            if (!filePath) {
+                alert("File path not found.");
+                return;
+            }
+
+            // Download file
+            const downloadLink = document.createElement("a");
+
+            downloadLink.href = "/" + filePath;
+            downloadLink.download = fileName || "download";
+            downloadLink.style.display = "none";
+
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            downloadLink.remove();
+
+            return;
+        }
+
+        // Normal Text Note: open Note Editor
         openEditor(note);
     });
+
 
     /* ==========================================
        21. OPEN NEWLY CREATED NOTE

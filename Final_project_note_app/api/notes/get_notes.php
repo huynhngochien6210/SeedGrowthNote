@@ -1,3 +1,4 @@
+
 <?php
 
 session_start();
@@ -21,33 +22,77 @@ try {
 
     $userId = $_SESSION['user_id'];
 
-    // Get notes belonging to current user
+    // Get notes and their attachments
     $sql = "
         SELECT
-            id,
-            title,
-            content,
-            is_pinned,
-            pinned_at,
-            created_at,
-            updated_at
-        FROM notes
-        WHERE owner_id = :owner_id
+            n.id,
+            n.title,
+            n.content,
+            n.is_pinned,
+            n.pinned_at,
+            n.created_at,
+            n.updated_at,
+
+            a.id AS attachment_id,
+            a.file_name,
+            a.file_path,
+            a.mime_type,
+            a.file_size
+
+        FROM notes n
+
+        LEFT JOIN attachments a
+            ON n.id = a.note_id
+
+        WHERE n.owner_id = :owner_id
+
         ORDER BY
-        created_at DESC, id DESC,
-            is_pinned DESC,
-            pinned_at DESC,
-            updated_at DESC
+            n.is_pinned DESC,
+            n.pinned_at DESC,
+            n.created_at DESC,
+            n.id DESC,
+            a.created_at DESC
     ";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['owner_id' => $userId]);
 
-    $notes = $stmt->fetchAll();
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Group attachments under their corresponding notes
+    $notes = [];
+
+    foreach ($rows as $row) {
+        $noteId = $row['id'];
+
+        if (!isset($notes[$noteId])) {
+            $notes[$noteId] = [
+                'id' => $row['id'],
+                'title' => $row['title'],
+                'content' => $row['content'],
+                'is_pinned' => $row['is_pinned'],
+                'pinned_at' => $row['pinned_at'],
+                'created_at' => $row['created_at'],
+                'updated_at' => $row['updated_at'],
+                'attachments' => []
+            ];
+        }
+
+        // Add attachment if it exists
+        if ($row['attachment_id'] !== null) {
+            $notes[$noteId]['attachments'][] = [
+                'id' => $row['attachment_id'],
+                'file_name' => $row['file_name'],
+                'file_path' => $row['file_path'],
+                'mime_type' => $row['mime_type'],
+                'file_size' => $row['file_size']
+            ];
+        }
+    }
 
     echo json_encode([
         'success' => true,
-        'data' => $notes
+        'data' => array_values($notes)
     ]);
 
 } catch (PDOException $e) {
