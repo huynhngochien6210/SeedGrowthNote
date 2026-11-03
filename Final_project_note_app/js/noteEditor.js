@@ -857,6 +857,80 @@ document.addEventListener("DOMContentLoaded", function () {
         closeEditor();
     });
 
+    
+    
+    /* ==========================================
+    DELETE NOTE ACTION
+    ========================================== */
+
+    document.addEventListener(
+        "seedgrowth:note-action",
+        async function (event) {
+
+            const { noteId, action } = event.detail || {};
+
+            // Only handle Delete action
+            if (action !== "delete") return;
+
+            if (!noteId) {
+                alert("Note ID not found.");
+                return;
+            }
+
+            const confirmed = window.confirm(
+                "Are you sure you want to delete this note?"
+            );
+
+            if (!confirmed) return;
+
+            try {
+                const response = await fetch(
+                    "/api/notes/delete_note.php",
+                    {
+                        method: "POST",
+                        credentials: "same-origin",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify({
+                            note_id: Number(noteId)
+                        })
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.message || "Failed to delete note."
+                    );
+                }
+
+                // Find and remove the corresponding Note Card
+                const card = grid?.querySelector(
+                    `.note-card[data-note-id="${CSS.escape(String(noteId))}"]`
+                );
+
+                if (card) {
+                    card.remove();
+                }
+
+                // Refresh search results
+                document.getElementById("noteSearchInput")
+                    ?.dispatchEvent(new Event("input"));
+
+                console.log("Deleted note:", noteId);
+
+            } catch (error) {
+                console.error("Delete note error:", error);
+
+                alert("Could not delete note: " + error.message);
+            }
+        }
+    );
+
+
     /* ==========================================
        20. OPEN AN EXISTING NOTE
     ========================================== */

@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () =>{
   const template= document.getElementById('noteTemplate');
   
   const noteGrid = document.getElementById('noteGrid');
+  const searchInput = document.getElementById('noteSearchInput');
 
   // Grid / List view
 const viewButtons = document.querySelectorAll('.view-toggle-group-btn');
@@ -66,6 +67,29 @@ viewButtons.forEach(button => {
               card.dataset.editorTitle = note.title || '';
               card.dataset.editorContent = note.content || '';
               card.dataset.pinned = String(note.is_pinned == 1);
+              card.dataset.searchText = [
+                note.title || '',
+                note.content || ''
+            ].join(' ').toLocaleLowerCase('vi');
+
+              // Prepare searchable content
+                const parser = new DOMParser();
+                const parsedContent = parser.parseFromString(
+                    note.content || '',
+                    'text/html'
+                );
+
+                const plainContent = parsedContent.body.textContent || '';
+
+                const attachmentNames = (note.attachments || [])
+                    .map(file => file.file_name || '')
+                    .join(' ');
+
+                card.dataset.searchText = [
+                    note.title || '',
+                    plainContent,
+                    attachmentNames
+                ].join(' ').toLocaleLowerCase('vi');
 
               // Identify note type using database
             const attachment = note.attachments?.[0];
@@ -84,7 +108,10 @@ viewButtons.forEach(button => {
 
               // Add note card after Create Note card
               newNoteCard.after(clone);
+              searchNotes();
           });
+
+          searchNotes();
 
       } catch (error) {
           console.error('Load notes error:', error);
@@ -102,6 +129,49 @@ viewButtons.forEach(button => {
 
       return date.toLocaleDateString('vi-VN');
   }
+
+  // Search Notes
+    const noResultsMessage = document.createElement('div');
+
+    noResultsMessage.className = 'no-notes-found w-100 text-center py-4';
+    noResultsMessage.textContent = 'No notes found';
+    noResultsMessage.hidden = true;
+
+    noteGrid.appendChild(noResultsMessage);
+
+
+    function searchNotes() {
+        const keyword = searchInput.value
+            .trim()
+            .toLocaleLowerCase('vi');
+
+        const noteCards = noteGrid.querySelectorAll('.note-card');
+
+        let visibleCount = 0;
+
+        noteCards.forEach(card => {
+            const searchableText = card.dataset.searchText || '';
+
+            const isMatch = searchableText.includes(keyword);
+
+            card.hidden = !isMatch;
+
+            if (isMatch) {
+                visibleCount++;
+            }
+        });
+
+        // Show message only when user has searched
+        // but no matching notes were found
+        if (keyword !== '' && visibleCount === 0) {
+            noResultsMessage.hidden = false;
+        } else {
+            noResultsMessage.hidden = true;
+        }
+    }
+
+    // Search immediately when typing
+    searchInput?.addEventListener('input', searchNotes);
 
   // Load notes when page is ready
   loadNotes();
