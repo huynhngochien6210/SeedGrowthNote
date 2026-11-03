@@ -37,7 +37,7 @@
     border-radius: 8px;
     background: transparent;
 
-    color: #ffffff;
+    color: #121111;
     font-size: 28px;
     font-weight: bold;
     line-height: 1;
@@ -111,4 +111,12 @@
 #noteGrid .note-context-menu button[data-action="delete"]:hover {
     background: #fde8e8;
     color: #b42323;
+}
+
+/* Three-dot button - List View only */
+#noteGrid.list-view .note-menu-trigger {
+    top: 50%;
+    right: 20px;
+    margin-right: 0;
+    transform: translateY(-50%);
 }
