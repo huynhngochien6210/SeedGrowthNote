@@ -40,8 +40,8 @@ function dbEnv(string $key, ?string $default = null): ?string
 $dbHost = dbEnv('DB_HOST', 'localhost');
 $dbPort = dbEnv('DB_PORT', '3306');
 $dbName = dbEnv('DB_NAME');
-$dbUser = dbEnv('DB_USER');
-$dbPass = dbEnv('DB_PASS', '');
+$dbUser = dbEnv('DB_USERNAME');
+$dbPass = dbEnv('DB_PASSWORD', '');
 
 if (
     $dbName === null ||
