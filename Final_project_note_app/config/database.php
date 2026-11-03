@@ -4,8 +4,11 @@ declare(strict_types=1);
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // Load environment variables from .env
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->load();
+$dotenv = Dotenv\Dotenv::createImmutable(
+    dirname(__DIR__)
+);
+
+$dotenv->safeLoad();
 
 // Database configuration
 $host = $_ENV['DB_HOST'];
