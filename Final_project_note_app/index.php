@@ -74,8 +74,8 @@ if (in_array($page, ['login', 'signup'], true)
 
 <body>
     <?php if (in_array($page, ['login', 'signup', 'verify'], true)): ?>
-        <?php //include 'components/hero.php'; ?>
-        <?php //include 'components/blurBG.php'; ?>
+        <?php include 'components/hero.php'; ?>
+        <?php include 'components/blurBG.php'; ?>
     <?php else: ?>
 
         <!-- Import file header vào -->

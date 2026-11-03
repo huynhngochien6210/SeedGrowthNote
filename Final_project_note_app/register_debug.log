@@ -1,2 +1,7 @@
 [02-Nov-2026 23:52:37 UTC] REGISTER DEBUG START
 [02-Nov-2026 23:52:37 UTC] Verification email error: Class "PHPMailer\PHPMailer\PHPMailer" not found
+[03-Nov-2026 02:45:10 UTC] REGISTER DEBUG START
+[03-Nov-2026 02:45:12 UTC] SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it
+[03-Nov-2026 02:45:12 UTC] Register error: Database connection failed.
+[03-Nov-2026 03:06:09 UTC] REGISTER DEBUG START
+[03-Nov-2026 03:10:18 UTC] REGISTER DEBUG START
