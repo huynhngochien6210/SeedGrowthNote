@@ -1,10 +1,6 @@
 <?php
 declare(strict_types=1);
 
-ini_set('log_errors', '1');
-ini_set('error_log', __DIR__ . '/../../register_debug.log');
-error_log('REGISTER DEBUG START');
-
 header('Content-Type: application/json; charset=utf-8');
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
