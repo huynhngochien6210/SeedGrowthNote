@@ -2,40 +2,43 @@
 declare(strict_types=1);
 
 header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store');
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Method not allowed'
-    ]);
+function respond(int $status, array $data): void
+{
+    http_response_code($status);
+    echo json_encode($data);
     exit;
 }
 
-// Kiểm tra CSRF token
-$csrf = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    respond(405, [
+        'success' => false,
+        'message' => 'Method not allowed.'
+    ]);
+}
+
+$token = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
 
 if (
-    !is_string($csrf) ||
     empty($_SESSION['csrf_token']) ||
-    !hash_equals($_SESSION['csrf_token'], $csrf)
+    !is_string($token) ||
+    !hash_equals($_SESSION['csrf_token'], $token)
 ) {
-    http_response_code(403);
-    echo json_encode([
+    respond(403, [
         'success' => false,
-        'message' => 'Invalid CSRF token'
+        'message' => 'Invalid CSRF token.'
     ]);
-    exit;
 }
 
-// Xóa dữ liệu session
+// Xóa dữ liệu của phiên đăng nhập.
 $_SESSION = [];
 
-// Xóa cookie session
+// Xóa cookie phiên.
 if (ini_get('session.use_cookies')) {
     $params = session_get_cookie_params();
 
@@ -49,10 +52,10 @@ if (ini_get('session.use_cookies')) {
     ]);
 }
 
-// Hủy session
+// Hủy phiên trên server.
 session_destroy();
 
-echo json_encode([
+respond(200, [
     'success' => true,
-    'message' => 'Đăng xuất thành công'
-], JSON_UNESCAPED_UNICODE);
+    'message' => 'Logged out successfully.'
+]);

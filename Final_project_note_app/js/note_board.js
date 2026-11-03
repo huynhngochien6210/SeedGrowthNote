@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () =>{
   
   const noteGrid = document.getElementById('noteGrid');
   const searchInput = document.getElementById('noteSearchInput');
+  
 
     // Grid / List view
     const viewButtons = document.querySelectorAll('.view-toggle-group-btn');

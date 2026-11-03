@@ -15,7 +15,14 @@ switch ($page) {
     case 'verify': 
         $contentFile = 'pages/verify.php'; 
         break;
-        
+    case 'forgot_password':
+    $contentFile = 'pages/forgot_password.php';
+    break;
+
+    case 'reset_password':
+    $contentFile = 'pages/reset_password.php';
+    break;    
+
     case 'home':
         $contentFile = null;
         break;

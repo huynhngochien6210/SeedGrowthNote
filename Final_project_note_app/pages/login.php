@@ -1,4 +1,3 @@
-
 <div class="login-card">
 
     <!-- Tiêu đề -->
@@ -56,10 +55,10 @@
         <!-- Quên mật khẩu -->
         <div class="mt-3">
             <a
-                href="#"
-                class="reset-link"
+                href="?page=forgot_password"
+                class="forgot-password-link"
             >
-                Reset password
+                Forgot password?
             </a>
         </div>
 
