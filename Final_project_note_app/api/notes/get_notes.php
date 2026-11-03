@@ -33,6 +33,7 @@ try {
             n.created_at,
             n.updated_at,
             n.note_type,
+            n.seed_color,
 
             a.id AS attachment_id,
             a.file_name,
@@ -76,6 +77,7 @@ try {
                 'pinned_at' => $row['pinned_at'],
                 'created_at' => $row['created_at'],
                 'updated_at' => $row['updated_at'],
+                'seed_color' => $row['seed_color'],
                 'attachments' => []
             ];
         }

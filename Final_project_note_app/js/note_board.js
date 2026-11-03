@@ -65,6 +65,16 @@ document.addEventListener('DOMContentLoaded', () =>{
               const title = clone.querySelector('.note-card-title');
               const date = clone.querySelector('.note-card-date');
 
+            // Restore saved seed color
+            const noteIcon = clone.querySelector('.note-card-icon');
+
+            if (noteIcon) {
+                noteIcon.style.setProperty(
+                    '--seed-body',
+                    note.seed_color || '#0eaf4c'
+                );
+            }
+
               // Note information
               card.dataset.noteId = note.id;
               card.dataset.editorTitle = note.title || '';
@@ -227,26 +237,72 @@ document.addEventListener('DOMContentLoaded', () =>{
     popover.hidden= true;
     activeIcon= null;
   };
-  // Bam vao icon bat ky de mo
-  document.getElementById('noteGrid').addEventListener('click', (e) =>{
-    const icon= e.target.closest('.note-card-icon.is-clickable');
-    if(!icon) return;
-    e.stopPropagation();
-    openPopover(icon);
-  });
-  //Bam chon mau
-  popover.addEventListener('click', (e) =>{
-    const swatch= e.target.closest('.color-swatch');
-    if(!swatch || !activeIcon) return;
-    activeIcon.style.setProperty('--seed-body', swatch.dataset.color);
-    closePopover();
-  })
-  //Bam ra ngoai de dong 
-  document.addEventListener('click', (e) =>{
-    if(!popover.hidden && !popover.contains(e.target)){
-      closePopover();
-    }
-  })
+  // Hover vào hạt mầm để mở bảng màu
+    noteGrid.addEventListener('mouseover', (e) => {
+        const icon = e.target.closest('.note-card-icon.is-clickable');
+
+        if (!icon || icon.contains(e.relatedTarget)) return;
+
+        openPopover(icon);
+    });
+
+    // Chọn màu và lưu vào database
+    popover.addEventListener('click', async (e) => {
+        const swatch = e.target.closest('.color-swatch');
+
+        if (!swatch || !activeIcon) return;
+
+        const selectedColor = swatch.dataset.color;
+
+        const noteCard = activeIcon.closest('.note-card');
+        const noteId = noteCard?.dataset.noteId;
+
+        if (!noteId) {
+            alert('Note ID not found.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/notes/update_note_color.php', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    note_id: Number(noteId),
+                    seed_color: selectedColor
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || 'Failed to update note color');
+            }
+
+            // Update color after database confirms success
+            activeIcon.style.setProperty('--seed-body', selectedColor);
+
+            closePopover();
+
+        } catch (error) {
+            console.error('Update note color error:', error);
+            alert('Could not update note color: ' + error.message);
+        }
+    });
+  // Đóng bảng màu khi rê chuột ra ngoài
+    document.addEventListener('mousemove', (e) => {
+        if (popover.hidden || !activeIcon) return;
+
+        const isHoveringIcon = activeIcon.contains(e.target);
+        const isHoveringPopover = popover.contains(e.target);
+
+        if (!isHoveringIcon && !isHoveringPopover) {
+            closePopover();
+        }
+    });
   // Option 1: Create note and save to database
   btnCreateNote.addEventListener('click', async (e) => {
     e.stopPropagation();
