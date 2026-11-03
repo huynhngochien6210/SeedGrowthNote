@@ -915,6 +915,85 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    
+    /* ==========================================
+    PIN / UNPIN FROM NOTE EDITOR
+    ========================================== */
+
+    if (pinToggle) {
+        pinToggle.addEventListener("change", async function () {
+
+            if (!currentNote) return;
+
+            const card = currentNote;
+            const noteId = card.dataset.noteId;
+
+            if (!noteId) return;
+
+            // Disable toggle while API is processing
+            pinToggle.disabled = true;
+
+            try {
+                const response = await fetch("/api/notes/toggle_pin.php", {
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        note_id: Number(noteId)
+                    })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.message || "Failed to update pin status."
+                    );
+                }
+
+                const isPinned = Number(result.data.is_pinned) === 1;
+
+                // Update note state
+                card.dataset.pinned = String(isPinned);
+
+                // Update pin timestamp
+                card.dataset.pinnedAt = isPinned
+                    ? String(Date.now())
+                    : "";
+
+                // Update toggle state
+                pinToggle.checked = isPinned;
+
+                // Update Pin icon on Note Board
+                updatePinIcon(card);
+
+                // Reorder notes
+                sortPinnedNotes();
+
+                console.log(
+                    isPinned ? "Note pinned from editor:" : "Note unpinned from editor:",
+                    noteId
+                );
+
+            } catch (error) {
+
+                // Restore previous toggle state
+                pinToggle.checked = card.dataset.pinned === "true";
+
+                console.error("Editor pin error:", error);
+
+                alert("Could not update pin status: " + error.message);
+
+            } finally {
+                pinToggle.disabled = false;
+            }
+        });
+    }
+
+
     /* ==========================================
     DELETE NOTE ACTION
     ========================================== */
