@@ -52,12 +52,18 @@ body.dark-mode .shared-board{
 body.dark-mode .shared-board-title{
   color: #ffffff;
 }
+body.dark-mode #noteGrid .note-menu-trigger{
+  color: white;
+}
+body.dark-mode #noteGrid:not(.grid-view) .note-pin-icon{
+  color: white;
+}
+body.dark-mode #noteGrid:not(.list-view) .note-pin-icon{
+  color: white;
+}
 
 /* Responsive on mobile */
 @media(max-width: 767.98px){
-    .view-toggle-group-btn:not(.active){
-        display: none;
-    }
     .view-toggle-group-btn.active{
         border-radius: 0.5rem !important;
     }
@@ -85,6 +91,96 @@ body.dark-mode .shared-board-title{
     .app-header{
         position: relative;
         z-index: 1060;
+    }
+
+    #noteGrid .note-context-menu {
+        width: 150px;
+        min-width: 150px;
+        max-width: 150px;
+
+        padding: 5px 8px;
+        box-sizing: border-box;
+
+        left: auto;
+        right: 0;
+        top: 55px;
+
+        z-index: 1000;
+    }
+
+    #noteGrid .note-context-menu button {
+        width: 100%;
+        padding: 8px 4px;
+        font-size: 14px;
+        box-sizing: border-box;
+        white-space: nowrap;
+    }
+
+    /* Grid / List buttons on mobile */
+.view-toggle-group {
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+}
+
+.view-toggle-group-btn {
+    display: flex !important;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    padding: 6px !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px !important;
+}
+
+.view-toggle-group-btn i {
+    font-size: 16px;
+}
+
+/* Mobile Search */
+.search-box {
+    display: block !important;
+    width: 150px;
+    max-width: 150px;
+}
+
+.search-box .input-group {
+    display: flex !important;
+    width: 150px;
+    height: 38px;
+    border: 1px solid #8FCB9B;
+    border-radius: 25px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.search-icon-box {
+    flex: 0 0 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+}
+
+.search-input {
+    display: block !important;
+    flex: 1 1 auto;
+    width: 0;
+    min-width: 0;
+    padding: 4px 6px;
+    border: none;
+    background: #fff;
+    font-size: 12px;
+}
+
+.search-input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+ .app-header > button.d-sm-none {
+        display: none !important;
     }
     
 }

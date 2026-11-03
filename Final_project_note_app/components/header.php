@@ -48,9 +48,5 @@
             <button class="icon-btn rounded-3" id="themeBtn" aria-label="Mode theme">
                 <i class="bi bi-sun-fill" id="themeIcon"></i>
             </button>
-            <!-- AI button -->
-            <button class="icon-btn rounded-circle">
-                <i class="bi bi-stars"></i>
-            </button>
          </div>
      </header>
