@@ -67,6 +67,9 @@ viewButtons.forEach(button => {
               card.dataset.editorTitle = note.title || '';
               card.dataset.editorContent = note.content || '';
               card.dataset.pinned = String(note.is_pinned == 1);
+              card.dataset.pinnedAt = note.pinned_at
+                ? String(new Date(note.pinned_at.replace(' ', 'T')).getTime())
+                : "";
               card.dataset.searchText = [
                 note.title || '',
                 note.content || ''
@@ -106,9 +109,19 @@ viewButtons.forEach(button => {
               title.textContent = note.title || 'Untitled';
               date.textContent = formatNoteDate(note.updated_at);
 
-              // Add note card after Create Note card
-              newNoteCard.after(clone);
-              searchNotes();
+            // Render Pin icon for pinned notes
+            if (Number(note.is_pinned) === 1) {
+                const pinIcon = document.createElement('span');
+
+                pinIcon.className = 'note-pin-icon';
+                pinIcon.innerHTML = '<i class="bi bi-pin-angle-fill"></i>';
+                pinIcon.title = 'Pinned';
+
+                card.appendChild(pinIcon);
+            }
+
+              /// Add note card to the end of the note list
+            noteGrid.appendChild(clone);
           });
 
           searchNotes();
