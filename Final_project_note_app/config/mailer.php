@@ -3,60 +3,223 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use PHPMailer\PHPMailer\PHPMailer;
+/**
+ * Load .env for local development.
+ * Render uses Environment Variables.
+ */
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->safeLoad();
 
 /**
- * Tạo và cấu hình PHPMailer dùng chung.
+ * Read environment variable.
  */
-function createMailer(): PHPMailer
+function gmailEnv(string $key): string
 {
-    $mail = new PHPMailer(true);
+    $value = $_ENV[$key] ?? getenv($key);
 
-    $mail->isSMTP();
-    $mail->Host = $_ENV['SMTP_HOST'];
-    $mail->SMTPAuth = true;
-    $mail->Username = $_ENV['SMTP_USERNAME'];
-    $mail->Password = $_ENV['SMTP_PASSWORD'];
+    if (!is_string($value) || trim($value) === '') {
+        throw new RuntimeException(
+            "Missing environment variable: {$key}"
+        );
+    }
 
-    $mail->Port = (int) $_ENV['SMTP_PORT'];
-
-    $mail->SMTPSecure = $mail->Port === 465
-        ? PHPMailer::ENCRYPTION_SMTPS
-        : PHPMailer::ENCRYPTION_STARTTLS;
-
-    $mail->CharSet = 'UTF-8';
-
-    $mail->setFrom(
-        $_ENV['SMTP_FROM_EMAIL'],
-        $_ENV['SMTP_FROM_NAME']
-    );
-
-    $mail->isHTML(true);
-
-    return $mail;
+    return trim($value);
 }
 
 /**
- * Gửi email xác minh tài khoản.
- *
- * Token được tạo bởi API đăng ký hoặc gửi lại xác minh.
- * Link xác minh có thời hạn 24 giờ.
+ * Get OAuth 2.0 access token from refresh token.
+ */
+function getGmailAccessToken(): string
+{
+    $clientId = gmailEnv('GMAIL_CLIENT_ID');
+    $clientSecret = gmailEnv('GMAIL_CLIENT_SECRET');
+    $refreshToken = gmailEnv('GMAIL_REFRESH_TOKEN');
+
+    if (!function_exists('curl_init')) {
+        throw new RuntimeException(
+            'PHP cURL extension is not installed.'
+        );
+    }
+
+    $ch = curl_init('https://oauth2.googleapis.com/token');
+
+    $body = http_build_query([
+        'client_id' => $clientId,
+        'client_secret' => $clientSecret,
+        'refresh_token' => $refreshToken,
+        'grant_type' => 'refresh_token'
+    ]);
+
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $body,
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/x-www-form-urlencoded'
+        ],
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 10,
+        CURLOPT_TIMEOUT => 30
+    ]);
+
+    try {
+        $response = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if ($response === false) {
+            throw new RuntimeException(
+                'OAuth connection error: ' . curl_error($ch)
+            );
+        }
+
+        $data = json_decode($response, true);
+
+        if (
+            $status !== 200 ||
+            !is_array($data) ||
+            empty($data['access_token'])
+        ) {
+            $error = is_array($data)
+                ? ($data['error_description']
+                    ?? $data['error']
+                    ?? 'Unknown OAuth error')
+                : 'Invalid OAuth response';
+
+            throw new RuntimeException(
+                "OAuth HTTP {$status}: " .
+                (is_string($error) ? $error : 'Unknown error')
+            );
+        }
+
+        return $data['access_token'];
+    } finally {
+        curl_close($ch);
+    }
+}
+
+/**
+ * Encode MIME message for Gmail API.
+ */
+function gmailBase64Url(string $message): string
+{
+    return rtrim(
+        strtr(base64_encode($message), '+/', '-_'),
+        '='
+    );
+}
+
+/**
+ * Send a Gmail message through HTTPS API.
+ */
+function sendGmailEmail(
+    string $recipientEmail,
+    string $recipientName,
+    string $subject,
+    string $html,
+    string $plainText
+): void {
+    if (!filter_var($recipientEmail, FILTER_VALIDATE_EMAIL)) {
+        throw new InvalidArgumentException(
+            'Invalid recipient email address.'
+        );
+    }
+
+    $senderEmail = gmailEnv('GMAIL_SENDER_EMAIL');
+    $accessToken = getGmailAccessToken();
+
+    // PHPMailer only constructs MIME.
+    // No SMTP connection is used.
+    $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+
+    $mail->CharSet = 'UTF-8';
+    $mail->setFrom($senderEmail, 'SeedGrowthNote');
+    $mail->addAddress($recipientEmail, $recipientName);
+    $mail->Subject = $subject;
+    $mail->isHTML(true);
+    $mail->Body = $html;
+    $mail->AltBody = $plainText;
+
+    if (!$mail->preSend()) {
+        throw new RuntimeException(
+            'Could not generate email MIME message.'
+        );
+    }
+
+    $rawMessage = gmailBase64Url(
+        $mail->getSentMIMEMessage()
+    );
+
+    $ch = curl_init(
+        'https://gmail.googleapis.com/gmail/v1/users/me/messages/send'
+    );
+
+    $payload = json_encode(
+        ['raw' => $rawMessage],
+        JSON_THROW_ON_ERROR
+    );
+
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $payload,
+        CURLOPT_HTTPHEADER => [
+            'Authorization: Bearer ' . $accessToken,
+            'Content-Type: application/json'
+        ],
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 10,
+        CURLOPT_TIMEOUT => 30
+    ]);
+
+    try {
+        $response = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if ($response === false) {
+            throw new RuntimeException(
+                'Gmail API connection error: ' .
+                curl_error($ch)
+            );
+        }
+
+        $data = json_decode($response, true);
+
+        if (
+            $status < 200 ||
+            $status >= 300 ||
+            !is_array($data) ||
+            empty($data['id'])
+        ) {
+            $error = is_array($data)
+                ? ($data['error']['message']
+                    ?? 'Gmail API did not return a message ID')
+                : 'Invalid Gmail API response';
+
+            throw new RuntimeException(
+                "Gmail API HTTP {$status}: " .
+                (is_string($error) ? $error : 'Unknown error')
+            );
+        }
+    } finally {
+        curl_close($ch);
+    }
+}
+
+/**
+ * Send verification email.
  */
 function sendVerificationEmail(
     string $recipientEmail,
     string $recipientName,
     string $token
 ): void {
-    $mail = createMailer();
-
-    $mail->addAddress(
-        $recipientEmail,
-        $recipientName
-    );
-
-    $verifyUrl = rtrim($_ENV['APP_URL'], '/')
+    $verifyUrl = rtrim(gmailEnv('APP_URL'), '/')
         . '/api/auth/verify_email.php?token='
         . rawurlencode($token);
+
+    $safeName = htmlspecialchars(
+        $recipientName,
+        ENT_QUOTES | ENT_SUBSTITUTE,
+        'UTF-8'
+    );
 
     $safeUrl = htmlspecialchars(
         $verifyUrl,
@@ -64,67 +227,83 @@ function sendVerificationEmail(
         'UTF-8'
     );
 
-    $safeName = htmlspecialchars(
+    $html = <<<HTML
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body style="font-family:Arial,sans-serif;
+                 background:#f4f7f4;padding:30px;">
+        <div style="max-width:550px;margin:auto;
+                    background:white;padding:30px;
+                    border-radius:12px;">
+            <h2 style="color:#2e7d32;">
+                Welcome to SeedGrowthNote!
+            </h2>
+
+            <p>Hello {$safeName},</p>
+
+            <p>
+                Thank you for registering.
+                Please verify your email address.
+            </p>
+
+            <p style="margin:30px 0;">
+                <a href="{$safeUrl}"
+                   style="background:#2e7d32;color:white;
+                          padding:12px 24px;
+                          border-radius:8px;
+                          text-decoration:none;">
+                    Verify Email
+                </a>
+            </p>
+
+            <p>This link expires in 24 hours.</p>
+
+            <p>
+                If you did not create this account,
+                please ignore this message.
+            </p>
+
+            <p>SeedGrowthNote Team</p>
+        </div>
+    </body>
+    </html>
+    HTML;
+
+    $plainText =
+        "Hello {$recipientName},\n\n"
+        . "Welcome to SeedGrowthNote!\n\n"
+        . "Verify your email:\n{$verifyUrl}\n\n"
+        . "This link expires in 24 hours.";
+
+    sendGmailEmail(
+        $recipientEmail,
         $recipientName,
-        ENT_QUOTES | ENT_SUBSTITUTE,
-        'UTF-8'
+        'Verify your SeedGrowthNote account',
+        $html,
+        $plainText
     );
-
-    $mail->Subject = 'Verify your SeedGrowthNote account';
-
-    $mail->Body = "
-        <h2>Welcome to SeedGrowthNote!</h2>
-
-        <p>Hello {$safeName},</p>
-
-        <p>Thank you for creating an account.</p>
-
-        <p>Please verify your email address by clicking
-        the button below.</p>
-
-        <p>
-            <a href=\"{$safeUrl}\">
-                Verify Email
-            </a>
-        </p>
-
-        <p>This link expires in 24 hours.</p>
-
-        <p>If you did not create this account,
-        please ignore this email.</p>
-    ";
-
-    $mail->AltBody =
-        "Welcome to SeedGrowthNote!\n\n"
-        . "Verify your account using this link:\n"
-        . $verifyUrl
-        . "\n\nThis link expires in 24 hours.";
-
-    $mail->send();
 }
 
 /**
- * Gửi email đặt lại mật khẩu.
- *
- * Token được tạo bởi forgot_password.php.
- * Link đặt lại mật khẩu có thời hạn 30 phút.
+ * Send password reset email.
  */
 function sendPasswordResetEmail(
     string $recipientEmail,
     string $recipientName,
     string $token
 ): void {
-    $mail = createMailer();
-
-    $mail->addAddress(
-        $recipientEmail,
-        $recipientName
-    );
-
-    // Đi qua hệ thống routing của SeedGrowthNote.
-    $resetUrl = rtrim($_ENV['APP_URL'], '/')
+    $resetUrl = rtrim(gmailEnv('APP_URL'), '/')
         . '/index.php?page=reset_password&token='
         . rawurlencode($token);
+
+    $safeName = htmlspecialchars(
+        $recipientName,
+        ENT_QUOTES | ENT_SUBSTITUTE,
+        'UTF-8'
+    );
 
     $safeUrl = htmlspecialchars(
         $resetUrl,
@@ -132,50 +311,62 @@ function sendPasswordResetEmail(
         'UTF-8'
     );
 
-    $safeName = htmlspecialchars(
-        $recipientName,
-        ENT_QUOTES | ENT_SUBSTITUTE,
-        'UTF-8'
-    );
+    $html = <<<HTML
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body style="font-family:Arial,sans-serif;
+                 background:#f4f7f4;padding:30px;">
+        <div style="max-width:550px;margin:auto;
+                    background:white;padding:30px;
+                    border-radius:12px;">
+            <h2 style="color:#2e7d32;">
+                Reset Your Password
+            </h2>
 
-    $mail->Subject = 'Reset your SeedGrowthNote password';
+            <p>Hello {$safeName},</p>
 
-    $mail->Body = "
-        <h2>Reset your password</h2>
+            <p>
+                We received a request to reset
+                your SeedGrowthNote password.
+            </p>
 
-        <p>Hello {$safeName},</p>
+            <p style="margin:30px 0;">
+                <a href="{$safeUrl}"
+                   style="background:#2e7d32;color:white;
+                          padding:12px 24px;
+                          border-radius:8px;
+                          text-decoration:none;">
+                    Reset Password
+                </a>
+            </p>
 
-        <p>We received a request to reset your
-        SeedGrowthNote password.</p>
+            <p>This link expires in 30 minutes.</p>
 
-        <p>
-            Click the link below to create a new password:
-        </p>
+            <p>
+                If you did not request a password reset,
+                please ignore this message.
+            </p>
 
-        <p>
-            <a href=\"{$safeUrl}\">
-                Reset Password
-            </a>
-        </p>
+            <p>SeedGrowthNote Team</p>
+        </div>
+    </body>
+    </html>
+    HTML;
 
-        <p>
-            This password reset link expires in
-            <strong>30 minutes</strong>.
-        </p>
-
-        <p>
-            If you did not request a password reset,
-            you can safely ignore this email.
-        </p>
-    ";
-
-    $mail->AltBody =
+    $plainText =
         "Hello {$recipientName},\n\n"
-        . "We received a request to reset your password.\n\n"
-        . "Reset your password using this link:\n"
-        . $resetUrl
-        . "\n\nThis link expires in 30 minutes."
-        . "\n\nIf you did not request this, ignore this email.";
+        . "Reset your SeedGrowthNote password:\n"
+        . "{$resetUrl}\n\n"
+        . "This link expires in 30 minutes.";
 
-    $mail->send();
+    sendGmailEmail(
+        $recipientEmail,
+        $recipientName,
+        'Reset your SeedGrowthNote password',
+        $html,
+        $plainText
+    );
 }
