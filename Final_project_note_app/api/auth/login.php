@@ -14,6 +14,7 @@ function respond(int $status, array $data): void
     exit;
 }
 
+// Only accept POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     respond(405, [
         'success' => false,
@@ -21,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     ]);
 }
 
+// Validate CSRF token
 $csrf = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
 
 if (
@@ -34,6 +36,7 @@ if (
     ]);
 }
 
+// Read JSON request
 $data = json_decode(file_get_contents('php://input'), true);
 
 if (!is_array($data)) {
@@ -46,6 +49,7 @@ if (!is_array($data)) {
 $email = $data['email'] ?? '';
 $password = $data['password'] ?? '';
 
+// Validate credentials
 if (
     !is_string($email) ||
     !filter_var(trim($email), FILTER_VALIDATE_EMAIL) ||
@@ -63,6 +67,7 @@ $email = strtolower(trim($email));
 try {
     require_once __DIR__ . '/../../config/database.php';
 
+    // Find user by email
     $stmt = $pdo->prepare(
         'SELECT id, display_name, email,
                 password_hash, email_verified_at
@@ -74,6 +79,7 @@ try {
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
+    // Verify password
     if (
         !$user ||
         !password_verify($password, $user['password_hash'])
@@ -84,6 +90,7 @@ try {
         ]);
     }
 
+    // Check email verification
     if ($user['email_verified_at'] === null) {
         respond(403, [
             'success' => false,
@@ -92,9 +99,10 @@ try {
         ]);
     }
 
+    // Regenerate session ID after authentication
     session_regenerate_id(true);
 
-    $_SESSION['user_id'] = (int)$user['id'];
+    $_SESSION['user_id'] = (int) $user['id'];
     $_SESSION['user_email'] = $user['email'];
     $_SESSION['display_name'] = $user['display_name'];
 

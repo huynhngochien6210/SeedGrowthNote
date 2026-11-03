@@ -1,7 +1,7 @@
 # Environment variables
 .env
-**.env.
-
+.env.*
+!.env.example
 
 # Composer dependencies
 /vendor/
@@ -12,3 +12,10 @@
 # OS files
 .DS_Store
 Thumbs.db
+
+# Debug logs
+*.log
+
+# User uploaded files
+uploads/attachments/*
+!uploads/attachments/.gitkeep
