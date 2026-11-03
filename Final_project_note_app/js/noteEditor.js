@@ -902,7 +902,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Normal Text Note: open Note Editor
         openEditor(note);
     });
-
+   
 
     /* ==========================================
        21. OPEN NEWLY CREATED NOTE
