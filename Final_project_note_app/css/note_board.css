@@ -126,3 +126,135 @@
 .note-dropdown-item:hover {
     background: #f5f3ec;
 }
+
+
+/* =================================
+   GRID VIEW
+   ================================= */
+
+#noteGrid .note-card-link {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#noteGrid .note-card-title {
+    display: block;
+    text-align: left;
+}
+
+#noteGrid .note-card-date {
+    display: block;
+    margin: 4px 0 0;
+    text-align: left;
+}
+
+/* =================================
+   LIST VIEW
+   ================================= */
+
+#noteGrid.list-view {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap !important;
+    gap: 12px;
+}
+
+/* Note card */
+#noteGrid.list-view .note-card {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    min-height: 76px;
+}
+
+/* Note content */
+#noteGrid.list-view .note-card-link {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-items: center;
+    column-gap: 16px;
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 250px;
+}
+
+/* Seed icon */
+#noteGrid.list-view .note-card-icon {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    flex: none;
+    width: 48px !important;
+    height: 56px !important;
+    min-width: 48px;
+}
+
+/* Title */
+#noteGrid.list-view .note-card-title {
+    grid-column: 2;
+    grid-row: 1;
+    flex: none;
+    text-align: left;
+}
+
+/* Date */
+#noteGrid.list-view .note-card-date {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 4px 0 0;
+    text-align: left;
+}
+
+/* Pin */
+#noteGrid:not(.list-view) .note-pin-icon {
+    position: relative;
+    display: inline-flex;
+    margin-right: 8px;
+    transform: none;
+}
+
+/* Labels */
+#noteGrid.list-view .sgn-card-label-button {
+    position: absolute;
+    right: 65px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+}
+
+/* Three dots */
+#noteGrid.list-view .note-menu-trigger {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    margin: 0;
+    transform: translateY(-50%);
+}
+
+/* Create note */
+#noteGrid.list-view .new-note-card {
+    align-self: flex-start;
+}
+
+/* Grid View - tránh tiêu đề đè lên dấu ba chấm */
+#noteGrid:not(.list-view) .note-card {
+    position: relative;
+}
+
+#noteGrid:not(.list-view) .note-card-title {
+    display: block;
+    max-width: 96px;
+    padding-right: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+#noteGrid:not(.list-view) .note-menu-trigger {
+    right: -12px;
+}

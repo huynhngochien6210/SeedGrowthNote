@@ -67,15 +67,27 @@ if (in_array($page, ['login', 'signup'], true)
         <link rel="stylesheet" href="css/signup.css">
     <?php elseif ($page === 'verify'): ?>
         <link rel="stylesheet" href="css/verify.css">
+    <?php elseif (in_array($page, ['forgot_password', 'reset_password'], true)): ?>
+        <link rel="stylesheet" href="css/password_reset.css">
     <?php endif; ?>
 
     <title>Seedgrowthnote</title>
 </head>
 
 <body>
-    <?php if (in_array($page, ['login', 'signup', 'verify'], true)): ?>
-        <?php include 'components/hero.php'; ?>
-        <?php include 'components/blurBG.php'; ?>
+    <?php if (in_array($page, ['login', 'signup', 'verify', 'forgot_password', 'reset_password'], true)): ?>
+
+        <?php if (in_array($page, ['forgot_password', 'reset_password'], true)): ?>
+
+            <?php require __DIR__ . '/' . $contentFile; ?>
+
+        <?php else: ?>
+
+            <?php include 'components/hero.php'; ?>
+            <?php include 'components/blurBG.php'; ?>
+
+        <?php endif; ?>
+
     <?php else: ?>
 
         <!-- Import file header vào -->
@@ -124,6 +136,8 @@ if (in_array($page, ['login', 'signup'], true)
         <script src="js/register.js"></script>
     <?php elseif ($page === 'verify'): ?>
         <script src="js/verify.js"></script>
+    <?php elseif (in_array($page, ['forgot_password', 'reset_password'], true)): ?>
+        <script src="js/password_reset.js"></script>
     <?php endif; ?>
 
     <?php if ($page === 'home'): ?>

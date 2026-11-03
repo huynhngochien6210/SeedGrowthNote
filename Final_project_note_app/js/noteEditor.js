@@ -857,6 +857,200 @@ document.addEventListener("DOMContentLoaded", function () {
         closeEditor();
     });
 
+    function updatePinIcon(card) {
+        if (!card) return;
+
+        let pinIcon = card.querySelector(".note-pin-icon");
+
+        if (card.dataset.pinned === "true") {
+            if (!pinIcon) {
+                pinIcon = document.createElement("span");
+                pinIcon.className = "note-pin-icon";
+                pinIcon.innerHTML = '<i class="bi bi-pin-angle-fill"></i>';
+                pinIcon.title = "Pinned";
+                card.appendChild(pinIcon);
+            }
+        } else {
+            pinIcon?.remove();
+        }
+    }
+
+    function sortPinnedNotes() {
+        if (!grid) return;
+
+        const cards = Array.from(
+            grid.querySelectorAll(".note-card")
+        );
+
+        cards.sort((a, b) => {
+            const aPinned = a.dataset.pinned === "true";
+            const bPinned = b.dataset.pinned === "true";
+
+            // Pinned notes always come first
+            if (aPinned !== bPinned) {
+                return Number(bPinned) - Number(aPinned);
+            }
+
+            // Among pinned notes, newest pinned_at comes first
+            if (aPinned && bPinned) {
+                return Number(b.dataset.pinnedAt || 0) -
+                    Number(a.dataset.pinnedAt || 0);
+            }
+
+            return 0;
+        });
+
+        const newNoteCard = grid.querySelector(".new-note-card");
+        const noResults = grid.querySelector(".no-notes-found");
+
+        cards.forEach(card => {
+            grid.insertBefore(card, noResults || null);
+        });
+
+        if (newNoteCard) {
+            grid.insertBefore(
+                newNoteCard,
+                cards[0] || noResults || null
+            );
+        }
+    }
+
+    /* ==========================================
+    DELETE NOTE ACTION
+    ========================================== */
+
+    document.addEventListener(
+        "seedgrowth:note-action",
+        async function (event) {
+
+            const { noteId, action } = event.detail || {};
+
+            // Handle Pin / Unpin
+            if (action === "pin") {
+                if (!noteId) {
+                    alert("Note ID not found.");
+                    return;
+                }
+
+                try {
+                    const response = await fetch("/api/notes/toggle_pin.php", {
+                        method: "POST",
+                        credentials: "same-origin",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify({
+                            note_id: Number(noteId)
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (!response.ok || !result.success) {
+                        throw new Error(result.message || "Failed to update pin status.");
+                    }
+
+                const card = grid?.querySelector(
+                    `.note-card[data-note-id="${CSS.escape(String(noteId))}"]`
+                );
+
+                if (card) {
+                    const isPinned = Number(result.data.is_pinned) === 1;
+
+                    card.dataset.pinned = String(isPinned);
+
+                    // Update pin time
+                    card.dataset.pinnedAt = isPinned
+                        ? String(Date.now())
+                        : "";
+
+                    // Update editor toggle
+                    if (currentNote?.dataset.noteId === String(noteId) && pinToggle) {
+                        pinToggle.checked = isPinned;
+                    }
+
+                    // Update pin icon
+                    updatePinIcon(card);
+
+                    // Sort notes immediately
+                    sortPinnedNotes();
+                }
+                    console.log(
+                        result.data.is_pinned === 1 ? "Note pinned:" : "Note unpinned:",
+                        noteId
+                    );
+
+                } catch (error) {
+                    console.error("Toggle pin error:", error);
+                    alert("Could not update pin status: " + error.message);
+                }
+
+                return;
+            }
+
+            // Only handle Delete action
+            if (action !== "delete") return;
+
+            if (!noteId) {
+                alert("Note ID not found.");
+                return;
+            }
+
+            const confirmed = window.confirm(
+                "Are you sure you want to delete this note?"
+            );
+
+            if (!confirmed) return;
+
+            try {
+                const response = await fetch(
+                    "/api/notes/delete_note.php",
+                    {
+                        method: "POST",
+                        credentials: "same-origin",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify({
+                            note_id: Number(noteId)
+                        })
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.message || "Failed to delete note."
+                    );
+                }
+
+                // Find and remove the corresponding Note Card
+                const card = grid?.querySelector(
+                    `.note-card[data-note-id="${CSS.escape(String(noteId))}"]`
+                );
+
+                if (card) {
+                    card.remove();
+                }
+
+                // Refresh search results
+                document.getElementById("noteSearchInput")
+                    ?.dispatchEvent(new Event("input"));
+
+                console.log("Deleted note:", noteId);
+
+            } catch (error) {
+                console.error("Delete note error:", error);
+
+                alert("Could not delete note: " + error.message);
+            }
+        }
+    );
+
+
     /* ==========================================
        20. OPEN AN EXISTING NOTE
     ========================================== */

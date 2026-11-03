@@ -1,33 +1,40 @@
 <?php
-
-session_start();
-
-require_once __DIR__ . '/../../config/database.php';
+declare(strict_types=1);
 
 header('Content-Type: application/json; charset=utf-8');
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 try {
-    // 1. Check login
+    require_once __DIR__ . '/../../config/database.php';
+
+    // 1. Check authentication
     if (!isset($_SESSION['user_id'])) {
         http_response_code(401);
+
         echo json_encode([
             'success' => false,
             'message' => 'User not logged in'
         ]);
+
         exit;
     }
 
-    // 2. Only accept POST
+    // 2. Only accept POST requests
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         http_response_code(405);
+
         echo json_encode([
             'success' => false,
             'message' => 'Method not allowed'
         ]);
+
         exit;
     }
 
-    $userId = $_SESSION['user_id'];
+    $userId = (int) $_SESSION['user_id'];
 
     // 3. Create default note
     $sql = "
@@ -57,12 +64,18 @@ try {
         'content' => ''
     ]);
 
-    $noteId = $pdo->lastInsertId();
+    $noteId = (int) $pdo->lastInsertId();
 
-    // 4. Get created note
+    // 4. Retrieve the created note
     $stmt = $pdo->prepare("
-        SELECT id, title, content, is_pinned,
-               pinned_at, created_at, updated_at
+        SELECT
+            id,
+            title,
+            content,
+            is_pinned,
+            pinned_at,
+            created_at,
+            updated_at
         FROM notes
         WHERE id = :id
           AND owner_id = :owner_id
@@ -75,6 +88,7 @@ try {
 
     $note = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    // 5. Return the created note
     http_response_code(201);
 
     echo json_encode([
@@ -83,9 +97,8 @@ try {
         'data' => $note
     ]);
 
-} catch (PDOException $e) {
-
-    error_log($e->getMessage());
+} catch (Throwable $e) {
+    error_log('Create note failed: ' . $e->getMessage());
 
     http_response_code(500);
 

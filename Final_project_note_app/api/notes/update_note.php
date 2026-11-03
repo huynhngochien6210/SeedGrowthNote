@@ -41,6 +41,17 @@ if (!is_array($data)) {
 $noteId = filter_var($data['note_id'] ?? null, FILTER_VALIDATE_INT);
 $title = trim($data['title'] ?? '');
 $content = $data['content'] ?? '';
+$noteType = $data['note_type'] ?? null;
+
+// Validate note type if provided
+if ($noteType !== null && !in_array($noteType, ['text', 'file'], true)) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid note type'
+    ]);
+    exit;
+}
 
 if (!$noteId || $title === '' || !is_string($content)) {
     http_response_code(400);
@@ -81,21 +92,23 @@ try {
         SET
             title = :title,
             content = :content,
+            note_type = COALESCE(:note_type, note_type),
             updated_at = NOW()
         WHERE id = :note_id
-          AND owner_id = :owner_id
+        AND owner_id = :owner_id
     ");
 
     $stmt->execute([
         'title' => $title,
         'content' => $content,
         'note_id' => $noteId,
-        'owner_id' => $_SESSION['user_id']
+        'owner_id' => $_SESSION['user_id'],
+        'note_type' => $noteType,
     ]);
 
     // 6. Get updated note
     $stmt = $pdo->prepare("
-        SELECT id, title, content, is_pinned,
+        SELECT id, title, content, note_type, is_pinned,
                created_at, updated_at
         FROM notes
         WHERE id = :note_id

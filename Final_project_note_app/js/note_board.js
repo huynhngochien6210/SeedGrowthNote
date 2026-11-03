@@ -8,26 +8,30 @@ document.addEventListener('DOMContentLoaded', () =>{
   const template= document.getElementById('noteTemplate');
   
   const noteGrid = document.getElementById('noteGrid');
+  const searchInput = document.getElementById('noteSearchInput');
+  
 
-  // Grid / List view
-const viewButtons = document.querySelectorAll('.view-toggle-group-btn');
+    // Grid / List view
+    const viewButtons = document.querySelectorAll('.view-toggle-group-btn');
 
-viewButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const view = button.dataset.view;
+    viewButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const view = button.dataset.view;
 
-        // Update active button
-        viewButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
+            console.log("View clicked:", view);
 
-        // Change note layout
-        if (view === 'list') {
-            noteGrid.classList.add('list-view');
-        } else {
-            noteGrid.classList.remove('list-view');
-        }
+            // Update active button
+            viewButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            // Change note layout
+            if (view === 'list') {
+                noteGrid.classList.add('list-view');
+            } else {
+                noteGrid.classList.remove('list-view');
+            }
+        });
     });
-});
 
   // Load notes from database
   async function loadNotes() {
@@ -66,26 +70,64 @@ viewButtons.forEach(button => {
               card.dataset.editorTitle = note.title || '';
               card.dataset.editorContent = note.content || '';
               card.dataset.pinned = String(note.is_pinned == 1);
+              card.dataset.pinnedAt = note.pinned_at
+                ? String(new Date(note.pinned_at.replace(' ', 'T')).getTime())
+                : "";
+              card.dataset.searchText = [
+                note.title || '',
+                note.content || ''
+            ].join(' ').toLocaleLowerCase('vi');
 
-              // Identify uploaded file notes
-              const attachment = note.attachments?.[0];
+              // Prepare searchable content
+                const parser = new DOMParser();
+                const parsedContent = parser.parseFromString(
+                    note.content || '',
+                    'text/html'
+                );
 
-              if (attachment) {
-                  card.dataset.noteType = 'file';
-                  card.dataset.filePath = attachment.file_path;
-                  card.dataset.fileName = attachment.file_name;
-              } else {
-                  card.dataset.noteType = 'text';
-              }
+                const plainContent = parsedContent.body.textContent || '';
+
+                const attachmentNames = (note.attachments || [])
+                    .map(file => file.file_name || '')
+                    .join(' ');
+
+                card.dataset.searchText = [
+                    note.title || '',
+                    plainContent,
+                    attachmentNames
+                ].join(' ').toLocaleLowerCase('vi');
+
+              // Identify note type using database
+            const attachment = note.attachments?.[0];
+
+            card.dataset.noteType = note.note_type || 'text';
+
+            if (note.note_type === 'file' && attachment) {
+                card.dataset.filePath = attachment.file_path;
+                card.dataset.fileName = attachment.file_name;
+            }
 
               link.dataset.noteId = note.id;
 
               title.textContent = note.title || 'Untitled';
               date.textContent = formatNoteDate(note.updated_at);
 
-              // Add note card after Create Note card
-              newNoteCard.after(clone);
+            // Render Pin icon for pinned notes
+            if (Number(note.is_pinned) === 1) {
+                const pinIcon = document.createElement('span');
+
+                pinIcon.className = 'note-pin-icon';
+                pinIcon.innerHTML = '<i class="bi bi-pin-angle-fill"></i>';
+                pinIcon.title = 'Pinned';
+
+                card.appendChild(pinIcon);
+            }
+
+              /// Add note card to the end of the note list
+            noteGrid.appendChild(clone);
           });
+
+          searchNotes();
 
       } catch (error) {
           console.error('Load notes error:', error);
@@ -103,6 +145,49 @@ viewButtons.forEach(button => {
 
       return date.toLocaleDateString('vi-VN');
   }
+
+  // Search Notes
+    const noResultsMessage = document.createElement('div');
+
+    noResultsMessage.className = 'no-notes-found w-100 text-center py-4';
+    noResultsMessage.textContent = 'No notes found';
+    noResultsMessage.hidden = true;
+
+    noteGrid.appendChild(noResultsMessage);
+
+
+    function searchNotes() {
+        const keyword = searchInput.value
+            .trim()
+            .toLocaleLowerCase('vi');
+
+        const noteCards = noteGrid.querySelectorAll('.note-card');
+
+        let visibleCount = 0;
+
+        noteCards.forEach(card => {
+            const searchableText = card.dataset.searchText || '';
+
+            const isMatch = searchableText.includes(keyword);
+
+            card.hidden = !isMatch;
+
+            if (isMatch) {
+                visibleCount++;
+            }
+        });
+
+        // Show message only when user has searched
+        // but no matching notes were found
+        if (keyword !== '' && visibleCount === 0) {
+            noResultsMessage.hidden = false;
+        } else {
+            noResultsMessage.hidden = true;
+        }
+    }
+
+    // Search immediately when typing
+    searchInput?.addEventListener('input', searchNotes);
 
   // Load notes when page is ready
   loadNotes();
@@ -196,6 +281,7 @@ viewButtons.forEach(button => {
         card.dataset.editorTitle = note.title || '';
         card.dataset.editorContent = note.content || '';
         card.dataset.pinned = String(note.is_pinned == 1);
+        card.dataset.noteType = note.note_type || 'text';
 
         link.dataset.noteId = note.id;
 
@@ -274,10 +360,11 @@ viewButtons.forEach(button => {
                       'Accept': 'application/json'
                   },
                   body: JSON.stringify({
-                      note_id: noteId,
-                      title: file.name,
-                      content: ''
-                  })
+                    note_id: noteId,
+                    title: file.name,
+                    content: '',
+                    note_type: 'file'
+                })
               }
           );
 

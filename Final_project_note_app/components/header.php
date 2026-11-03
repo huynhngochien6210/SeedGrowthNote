@@ -17,7 +17,14 @@
                 <span class="input-group-text search-icon-box border-0">
                     <i class="bi bi-search"></i>
                 </span>
-                <input type="text" class="form-control search-input border-0 shadow-none" placeholder="Search...">
+
+                <input
+                    type="text"
+                    id="noteSearchInput"
+                    class="form-control search-input border-0 shadow-none"
+                    placeholder="Search..."
+                    autocomplete="off"
+                >
             </div>
         </div>
 

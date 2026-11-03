@@ -32,6 +32,7 @@ try {
             n.pinned_at,
             n.created_at,
             n.updated_at,
+            n.note_type,
 
             a.id AS attachment_id,
             a.file_name,
@@ -70,6 +71,7 @@ try {
                 'id' => $row['id'],
                 'title' => $row['title'],
                 'content' => $row['content'],
+                'note_type' => $row['note_type'],
                 'is_pinned' => $row['is_pinned'],
                 'pinned_at' => $row['pinned_at'],
                 'created_at' => $row['created_at'],
