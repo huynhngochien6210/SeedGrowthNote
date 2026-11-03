@@ -3,7 +3,7 @@
 -- DATABASE: SEEDGROWTHNOTE
 -- MySQL 8.4.3
 -- =====================================================
-
+DROP DATABASE IF EXISTS seedgrowthnote;
 CREATE DATABASE IF NOT EXISTS seedgrowthnote
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
@@ -271,3 +271,16 @@ CREATE TABLE ai_query_notes (
 
     INDEX idx_ai_query_notes_note (note_id)
 ) ENGINE=InnoDB;
+
+
+
+INSERT INTO users (
+    email,
+    display_name,
+    password_hash
+)
+VALUES (
+    'test@seedgrowthnote.local',
+    'Test User',
+    '2y$10$b5NZhejBL9dZO3Iw/zoDZ.NCeErGrrLaKEHNe0J4rpS0d54UH3Xmi'
+);

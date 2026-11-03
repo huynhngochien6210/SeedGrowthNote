@@ -1,7 +1,7 @@
 # Environment variables
 .env
-.env.*
-!.env.example
+**.env.
+
 
 # Composer dependencies
 /vendor/
@@ -12,3 +12,4 @@
 # OS files
 .DS_Store
 Thumbs.db
+register_debug.log
