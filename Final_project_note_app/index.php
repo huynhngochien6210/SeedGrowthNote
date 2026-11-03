@@ -122,6 +122,8 @@ if (in_array($page, ['login', 'signup'], true)
         <script src="js/login.js"></script>
     <?php elseif ($page === 'signup'): ?>
         <script src="js/register.js"></script>
+    <?php elseif ($page === 'verify'): ?>
+        <script src="js/verify.js"></script>
     <?php endif; ?>
 
     <?php if ($page === 'home'): ?>
