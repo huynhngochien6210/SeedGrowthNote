@@ -5,6 +5,7 @@ session_start();
 header('Content-Type: application/json; charset=utf-8');
 
 require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../collab/_common.php';
 
 // 1. Check login
 if (!isset($_SESSION['user_id'])) {
@@ -65,7 +66,7 @@ if (!$noteId || $title === '' || !is_string($content)) {
 try {
     // 4. Check note ownership
     $stmt = $pdo->prepare("
-        SELECT id
+        SELECT id, is_password_protected, note_password_hash
         FROM notes
         WHERE id = :note_id
           AND owner_id = :owner_id
@@ -77,12 +78,20 @@ try {
         'owner_id' => $_SESSION['user_id']
     ]);
 
-    if (!$stmt->fetch()) {
+    $ownedNote = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$ownedNote) {
         http_response_code(404);
         echo json_encode([
             'success' => false,
             'message' => 'Note not found'
         ]);
+        exit;
+    }
+
+    $ownedNote['id'] = $noteId;
+    if (!unlocked($ownedNote)) {
+        http_response_code(423);
+        echo json_encode(['success'=>false, 'code'=>'NOTE_LOCKED', 'message'=>'Ghi chú cần mở khóa trước khi sửa']);
         exit;
     }
 

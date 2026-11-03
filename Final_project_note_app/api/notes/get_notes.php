@@ -28,6 +28,7 @@ try {
             n.id,
             n.title,
             n.content,
+            n.is_password_protected,
             n.is_pinned,
             n.pinned_at,
             n.created_at,
@@ -71,7 +72,8 @@ try {
             $notes[$noteId] = [
                 'id' => $row['id'],
                 'title' => $row['title'],
-                'content' => $row['content'],
+                'content' => (int)$row['is_password_protected'] === 1 ? '' : $row['content'],
+                'is_password_protected' => (bool)$row['is_password_protected'],
                 'note_type' => $row['note_type'],
                 'is_pinned' => $row['is_pinned'],
                 'pinned_at' => $row['pinned_at'],

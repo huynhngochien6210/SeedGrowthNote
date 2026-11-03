@@ -1,0 +1,11 @@
+.sgn-shared-clickable{display:flex;flex-direction:column;gap:8px;align-items:flex-start;text-align:left;width:100%;cursor:pointer;border:1px solid #d5e4d5;border-radius:12px;background:#fff;padding:18px;color:#244a2e}
+.sgn-shared-clickable:hover{background:#eff8ef}
+.sgn-shared-clickable span{font-size:12px;color:#65776a;overflow-wrap:anywhere}
+.sgn-shared-editor{flex:1;min-width:0;padding:24px;background:var(--bs-body-bg,#fff);color:var(--bs-body-color,#222)}
+.sgn-shared-top{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.sgn-shared-top button{border:1px solid #8aa38b;border-radius:8px;padding:7px 12px;background:transparent;color:inherit}
+#sgnSharedTitle{width:100%;padding:10px;font-size:22px;border:1px solid #c5d7c5;border-radius:8px;background:transparent;color:inherit}
+#sgnSharedContent{margin-top:14px;min-height:55vh;padding:14px;border:1px solid #c5d7c5;border-radius:8px;overflow:auto;background:transparent;color:inherit}
+#sgnSharedContent[contenteditable=false],#sgnSharedTitle[readonly]{opacity:.8}
+#sgnSharedSaveStatus{font-size:12px;color:#446e4a}
+#sgnChangeNotePassword{margin:6px 16px}

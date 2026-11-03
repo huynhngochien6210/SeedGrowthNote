@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () =>{
 
               // Note information
               card.dataset.noteId = note.id;
+              card.dataset.protected = String(!!note.is_password_protected);
               card.dataset.editorTitle = note.title || '';
               card.dataset.editorContent = note.content || '';
               card.dataset.pinned = String(note.is_pinned == 1);

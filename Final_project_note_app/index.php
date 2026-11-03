@@ -2,6 +2,8 @@
 session_start();
 require_once __DIR__ . '/route.php';
 
+if (empty($_SESSION['sgn_csrf'])) { $_SESSION['sgn_csrf'] = bin2hex(random_bytes(32)); }
+
 if ($page === 'home' && empty($_SESSION['user_id'])) {
     header('Location: ?page=login');
     exit;
@@ -18,6 +20,7 @@ if (in_array($page, ['login', 'signup'], true)
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="sgn-csrf" content="<?= htmlspecialchars($_SESSION['sgn_csrf'], ENT_QUOTES, 'UTF-8') ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     
@@ -60,6 +63,7 @@ if (in_array($page, ['login', 'signup'], true)
     <link rel="stylesheet" href="css/ai.css">
     <link rel="stylesheet" href="css/noteEditor.css">
     <link rel="stylesheet" href="css/noteMenu.css">
+    <link rel="stylesheet" href="css/sgn-collab.css">
     <!-- css login -->
     <?php if ($page === 'login'): ?>
         <link rel="stylesheet" href="css/login.css">
@@ -151,6 +155,7 @@ if (in_array($page, ['login', 'signup'], true)
         <script src="js/ai.js"></script>
         <script src="js/script.js"></script>
         <script src="js/noteMenu.js"></script>
+        <script src="js/sgn-collab.js"></script>
     <?php endif; ?>
     <script>
         document.querySelectorAll('.nav-panel-btn').forEach(function (btn) {

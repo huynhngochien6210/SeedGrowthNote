@@ -171,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Close Shared when clicking outside
     document.addEventListener('click', event => {
+        if (document.getElementById('sgnSharedEditor')?.hidden === false) return;
         if (
             !isOpen() ||
             sharedBoard.contains(event.target) ||

@@ -1147,31 +1147,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         event.preventDefault();
 
-        // Check whether this is an uploaded File Note
-        if (note.dataset.noteType === "file") {
-
-            const filePath = note.dataset.filePath;
-            const fileName = note.dataset.fileName;
-
-            if (!filePath) {
-                alert("File path not found.");
-                return;
-            }
-
-            // Download file
-            const downloadLink = document.createElement("a");
-
-            downloadLink.href = "/" + filePath;
-            downloadLink.download = fileName || "download";
-            downloadLink.style.display = "none";
-
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            downloadLink.remove();
-
-            return;
-        }
-
+        // A file note also opens the editor; download only in Attachments.
         // Normal Text Note: open Note Editor
         openEditor(note);
     });

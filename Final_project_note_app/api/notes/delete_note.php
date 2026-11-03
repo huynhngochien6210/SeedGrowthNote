@@ -84,6 +84,19 @@ try {
     // 6. Delete database records in a transaction
     $pdo->beginTransaction();
 
+    // Remove references before deleting a note (no ON DELETE CASCADE in schema).
+    $cleanup = [
+        'DELETE FROM notifications WHERE note_share_id IN (SELECT id FROM note_shares WHERE note_id = ?)',
+        'DELETE FROM note_shares WHERE note_id = ?',
+        'DELETE FROM note_labels WHERE note_id = ?',
+        'DELETE FROM note_summaries WHERE note_id = ?',
+        'DELETE FROM ai_query_notes WHERE note_id = ?',
+    ];
+    foreach ($cleanup as $query) {
+        $cleanupStmt = $pdo->prepare($query);
+        $cleanupStmt->execute([$noteId]);
+    }
+
     $stmt = $pdo->prepare("
         DELETE FROM attachments
         WHERE note_id = :note_id
