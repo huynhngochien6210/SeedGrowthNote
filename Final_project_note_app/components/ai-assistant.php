@@ -31,7 +31,7 @@
         </div>
 
         <!-- Chat -->
-        <div class="ai-chat">
+        <div class="ai-chat" id="aiChat">
 
             <!-- Tin nhắn AI mẫu -->
             <div class="ai-message">
