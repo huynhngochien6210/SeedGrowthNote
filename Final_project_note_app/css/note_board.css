@@ -258,3 +258,48 @@
 #noteGrid:not(.list-view) .note-menu-trigger {
     right: -12px;
 }
+
+
+/* ==========================================
+   LOCK ICON ON SEED NOTE
+========================================== */
+
+/* Làm mốc định vị ổ khóa */
+#noteGrid .note-card-icon {
+    position: relative;
+}
+
+/* Mặc định ẩn ổ khóa */
+#noteGrid .note-lock-badge {
+    display: none;
+
+    position: absolute;
+    top: -5px;
+    right: -5px;
+
+    width: 24px;
+    height: 24px;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+    color: #333333;
+
+    border: 1px solid #d3d3d3;
+    border-radius: 50%;
+
+    font-size: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+
+    z-index: 5;
+
+    /* Không chặn thao tác click vào note */
+    pointer-events: none;
+}
+
+/* Chỉ hiện khi note được bảo vệ */
+#noteGrid .note-card[data-protected="true"]
+.note-lock-badge {
+    display: flex;
+}

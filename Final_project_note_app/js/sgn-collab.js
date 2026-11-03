@@ -18,14 +18,45 @@
   }
   const info = e => window.alert(e?.message||String(e));
   function currentCard() { return document.querySelector(`.note-card[data-note-id="${CSS.escape(String(state.noteId))}"]`); }
+  
   async function unlock(noteId) {
-    const status=await api('password.php',undefined,{note_id:noteId});
-    if (!status.protected || status.unlocked) return true;
-    const password=prompt('Ghi chú được bảo vệ. Nhập mật khẩu để mở:');
-    if (password===null) return false;
-    await api('password.php',{note_id:noteId,action:'unlock',password});
-    return true;
+      // Kiểm tra note có được bảo vệ hay không
+      const status = await api(
+          'password.php',
+          undefined,
+          { note_id: noteId }
+      );
+
+      // Note không có mật khẩu thì mở bình thường
+      if (!status.protected) {
+          return true;
+      }
+
+      // Note có mật khẩu: luôn yêu cầu nhập khi mở
+      // Không bỏ qua chỉ vì PHP Session còn trạng thái unlocked
+      const password = prompt(
+          '🔒 Ghi chú đã được khóa.\nNhập mật khẩu để mở:'
+      );
+
+      if (password === null) {
+          return false;
+      }
+
+      if (!password) {
+          alert('Vui lòng nhập mật khẩu.');
+          return false;
+      }
+
+      // Gửi mật khẩu để PHP xác thực bằng password_verify()
+      await api('password.php', {
+          note_id: noteId,
+          action: 'unlock',
+          password: password
+      });
+
+      return true;
   }
+
   async function managePassword(action, noteId) {
     if (!noteId) return;
     const data={note_id:noteId,action};

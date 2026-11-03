@@ -57,6 +57,12 @@
                         </g> 
                     </g>
                 </svg>
+                
+                <!-- Lock icon: chỉ hiển thị khi note có mật khẩu -->
+                <span class="note-lock-badge" title="Password protected">
+                    <i class="bi bi-lock-fill"></i>
+                </span>
+
             </span>
             <span class="note-card-title">Untitled</span>
             <span class="note-card-date"></span>

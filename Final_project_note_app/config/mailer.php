@@ -179,3 +179,65 @@ function sendPasswordResetEmail(
 
     $mail->send();
 }
+
+/**
+ * Email notification after a note is shared or its permission changes.
+ * This function must be called AFTER the database transaction commits.
+ */
+function sendNoteShareEmail(
+    string $recipientEmail,
+    string $recipientName,
+    string $senderName,
+    string $noteTitle,
+    string $permission,
+    bool $permissionChanged = false
+): void {
+    $mail = createMailer();
+    $mail->addAddress($recipientEmail, $recipientName);
+
+    $accessLabel = $permission === 'edit' ? 'Can edit' : 'Can view';
+    $actionLabel = $permissionChanged ? 'updated your permission for' : 'shared';
+    $subject = $permissionChanged
+        ? 'SeedGrowthNote: your note access has changed'
+        : 'SeedGrowthNote: a note was shared with you';
+
+    // Open the app and navigate to Shared with me. Do not send note content.
+    $appUrl = rtrim((string) ($_ENV['APP_URL'] ?? ''), '/');
+    if ($appUrl === '') {
+        throw new RuntimeException('APP_URL is not configured');
+    }
+    $url = $appUrl . '/index.php';
+
+    $esc = static fn(string $text): string => htmlspecialchars(
+        $text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'
+    );
+    $safeName = $esc($recipientName);
+    $safeSender = $esc($senderName);
+    $safeTitle = $esc($noteTitle);
+    $safeLabel = $esc($accessLabel);
+    $safeUrl = $esc($url);
+
+    $mail->Subject = $subject;
+    $mail->Body = <<<HTML
+<!doctype html>
+<html lang="en">
+<body style="font-family:Arial,sans-serif;color:#253229;line-height:1.6">
+  <h2>SeedGrowthNote</h2>
+  <p>Hello {$safeName},</p>
+  <p><strong>{$safeSender}</strong> {$actionLabel} a note with you:</p>
+  <p><strong>{$safeTitle}</strong></p>
+  <p>Permission: <strong>{$safeLabel}</strong></p>
+  <p><a href="{$safeUrl}">Open SeedGrowthNote</a> and go to <strong>Shared with me</strong>.</p>
+  <p>If the note is password protected, ask its owner for the note password separately.</p>
+</body>
+</html>
+HTML;
+    $mail->AltBody = "Hello {$recipientName},\n\n"
+        . "{$senderName} {$actionLabel} a note with you: {$noteTitle}\n"
+        . "Permission: {$accessLabel}\n\n"
+        . "Open SeedGrowthNote: {$url}\n"
+        . "Then choose Shared with me.\n"
+        . "If the note is password protected, request its password separately.";
+
+    $mail->send();
+}
