@@ -61,22 +61,22 @@ if (in_array($page, ['login', 'signup'], true)
     <link rel="stylesheet" href="css/noteEditor.css">
     <link rel="stylesheet" href="css/noteMenu.css">
     <!-- css login -->
-    <?php if ($page === 'login'): ?>
+    <?php //if ($page === 'login'): ?>
         <link rel="stylesheet" href="css/login.css">
-    <?php elseif ($page === 'signup'): ?>
+    <?php //elseif ($page === 'signup'): ?>
         <link rel="stylesheet" href="css/signup.css">
-    <?php elseif ($page === 'verify'): ?>
+    <?php //elseif ($page === 'verify'): ?>
         <link rel="stylesheet" href="css/verify.css">
-    <?php endif; ?>
+    <?php //endif; ?>
 
     <title>Seedgrowthnote</title>
 </head>
 
 <body>
-    <?php if (in_array($page, ['login', 'signup', 'verify'], true)): ?>
-        <?php include 'components/hero.php'; ?>
-        <?php include 'components/blurBG.php'; ?>
-    <?php else: ?>
+    <?php //if (in_array($page, ['login', 'signup', 'verify'], true)): ?>
+        <?php //include 'components/hero.php'; ?>
+        <?php //include 'components/blurBG.php'; ?>
+    <?php //else: ?>
 
         <!-- Import file header vào -->
         <?php include 'components/header.php'; ?>
@@ -115,18 +115,18 @@ if (in_array($page, ['login', 'signup'], true)
         <!-- Import share note -->
         <?php include 'components/shareNote.php'; ?>
 
-    <?php endif; ?>
+    <?php //endif; ?>
 
     <!-- my javascript -->
-    <?php if ($page === 'login'): ?>
+    <?php //if ($page === 'login'): ?>
         <script src="js/login.js"></script>
-    <?php elseif ($page === 'signup'): ?>
+    <?php //elseif ($page === 'signup'): ?>
         <script src="js/register.js"></script>
-    <?php elseif ($page === 'verify'): ?>
+    <?php //elseif ($page === 'verify'): ?>
         <script src="js/verify.js"></script>
-    <?php endif; ?>
+    <?php //endif; ?>
 
-    <?php if ($page === 'home'): ?>
+    <?php //if ($page === 'home'): ?>
         <script src="js/homePage.js"></script>
         <script src="js/filter_tags.js"></script>
         <script src="js/account.js"></script>
@@ -137,7 +137,7 @@ if (in_array($page, ['login', 'signup'], true)
         <script src="js/ai.js"></script>
         <script src="js/script.js"></script>
         <script src="js/noteMenu.js"></script>
-    <?php endif; ?>
+    <?php //endif; ?>
     <script>
         document.querySelectorAll('.nav-panel-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {

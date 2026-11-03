@@ -255,3 +255,51 @@ body.dark-mode .filter-tags-close {
         margin-left: 40px;
     }
 }
+/* Additive styles. Does not replace the team's existing CSS. */
+.sgn-card-label-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin: 4px 10px 9px;
+    padding: 3px 9px;
+    border: 1px solid #5b8353;
+    border-radius: 8px;
+    background: #f2f8ec;
+    color: #254f22;
+    font-size: 12px;
+    cursor: pointer;
+}
+.sgn-card-label-button:hover { background: #dcebd4; }
+.sgn-label-choice { display: flex; align-items: center; gap: 8px; padding: 7px 3px; cursor: pointer; }
+.sgn-label-choice input { accent-color: #337a37; }
+
+/* Hiển thị tên label bên dưới note */
+.sgn-card-label-button {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+
+    max-width: calc(100% - 20px);
+    margin: 4px 10px 9px;
+    padding: 4px 9px;
+
+    border: 1px solid #5b8353;
+    border-radius: 8px;
+
+    background: #f2f8ec;
+    color: #254f22;
+    font-size: 12px;
+
+    cursor: pointer;
+    text-align: left;
+}
+
+.sgn-label-text {
+    overflow-wrap: anywhere;
+    white-space: normal;
+}
+
+.sgn-card-label-button:hover {
+    background: #dcebd4;
+}

@@ -67,16 +67,15 @@ viewButtons.forEach(button => {
               card.dataset.editorContent = note.content || '';
               card.dataset.pinned = String(note.is_pinned == 1);
 
-              // Identify uploaded file notes
-              const attachment = note.attachments?.[0];
+              // Identify note type using database
+            const attachment = note.attachments?.[0];
 
-              if (attachment) {
-                  card.dataset.noteType = 'file';
-                  card.dataset.filePath = attachment.file_path;
-                  card.dataset.fileName = attachment.file_name;
-              } else {
-                  card.dataset.noteType = 'text';
-              }
+            card.dataset.noteType = note.note_type || 'text';
+
+            if (note.note_type === 'file' && attachment) {
+                card.dataset.filePath = attachment.file_path;
+                card.dataset.fileName = attachment.file_name;
+            }
 
               link.dataset.noteId = note.id;
 
@@ -196,6 +195,7 @@ viewButtons.forEach(button => {
         card.dataset.editorTitle = note.title || '';
         card.dataset.editorContent = note.content || '';
         card.dataset.pinned = String(note.is_pinned == 1);
+        card.dataset.noteType = note.note_type || 'text';
 
         link.dataset.noteId = note.id;
 
@@ -274,10 +274,11 @@ viewButtons.forEach(button => {
                       'Accept': 'application/json'
                   },
                   body: JSON.stringify({
-                      note_id: noteId,
-                      title: file.name,
-                      content: ''
-                  })
+                    note_id: noteId,
+                    title: file.name,
+                    content: '',
+                    note_type: 'file'
+                })
               }
           );
 
