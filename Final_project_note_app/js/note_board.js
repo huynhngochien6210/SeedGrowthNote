@@ -255,7 +255,9 @@ document.addEventListener('DOMContentLoaded', () =>{
 
         const selectedColor = swatch.dataset.color;
 
-        const noteCard = activeIcon.closest('.note-card');
+        // Lưu phần tử icon trước khi gọi API
+        const currentIcon = activeIcon;
+        const noteCard = currentIcon?.closest('.note-card');
         const noteId = noteCard?.dataset.noteId;
 
         if (!noteId) {
@@ -284,7 +286,9 @@ document.addEventListener('DOMContentLoaded', () =>{
             }
 
             // Update color after database confirms success
-            activeIcon.style.setProperty('--seed-body', selectedColor);
+            if (currentIcon?.isConnected) {
+                currentIcon.style.setProperty('--seed-body', selectedColor);
+            }
 
             closePopover();
 

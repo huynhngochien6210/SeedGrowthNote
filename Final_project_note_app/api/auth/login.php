@@ -112,7 +112,12 @@ try {
     ]);
 
 } catch (Throwable $e) {
-    error_log('Login error: ' . $e->getMessage());
+
+    error_log(
+        'Login error: ' . $e->getMessage(),
+        3,
+        __DIR__ . '/../../login_debug.log'
+    );
 
     respond(500, [
         'success' => false,
