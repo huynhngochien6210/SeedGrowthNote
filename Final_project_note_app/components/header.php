@@ -19,11 +19,14 @@
                 </span>
 
                 <input
-                    type="text"
+                    type="search"
                     id="noteSearchInput"
+                    name="notes_search_query"
                     class="form-control search-input border-0 shadow-none"
                     placeholder="Search..."
                     autocomplete="off"
+                    value=""
+                    aria-label="Search notes"
                 >
             </div>
         </div>
