@@ -1148,8 +1148,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
         event.preventDefault();
 
-        // A file note also opens the editor; download only in Attachments.
-        // Normal Text Note: open Note Editor
+        const noteType = note.dataset.noteType || 'text';
+
+        if (noteType === 'file') {
+
+            // File Note: mở file đính kèm
+            const filePath = note.dataset.filePath;
+
+            if (!filePath) {
+                alert('File attachment not found.');
+                return;
+            }
+
+            window.open('/' + filePath, '_blank', 'noopener');
+
+            return;
+        }
+
+        // Text Note: mở Note Editor
         openEditor(note);
     });
    
