@@ -42,3 +42,11 @@ RUN a2enmod rewrite \
 EXPOSE 8000
 
 CMD ["apache2-foreground"]
+
+RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libwebp-dev \
+    && docker-php-ext-configure gd --with-jpeg --with-webp \
+    && docker-php-ext-install gd \
+    && rm -rf /var/lib/apt/lists/*
