@@ -751,6 +751,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         currentNote = note;
+        window.SeedGrowthNoteCurrentNoteId = note.dataset.noteId;
 
         // Hide Note Board
         board.classList.add("d-none");
@@ -848,7 +849,7 @@ document.addEventListener("DOMContentLoaded", function () {
         editorPanel?.classList.remove("active");
 
         board?.classList.remove("d-none");
-
+        window.SeedGrowthNoteCurrentNoteId = null;
         currentNote = null;
     }
 

@@ -4,16 +4,16 @@ require_once __DIR__ . '/route.php';
 
 if (empty($_SESSION['sgn_csrf'])) { $_SESSION['sgn_csrf'] = bin2hex(random_bytes(32)); }
 
-if ($page === 'home' && empty($_SESSION['user_id'])) {
-    header('Location: ?page=login');
-    exit;
-}
+// if ($page === 'home' && empty($_SESSION['user_id'])) {
+//     header('Location: ?page=login');
+//     exit;
+// }
 
-if (in_array($page, ['login', 'signup'], true)
-    && !empty($_SESSION['user_id'])) {
-    header('Location: ?page=home');
-    exit;
-}
+// if (in_array($page, ['login', 'signup'], true)
+//     && !empty($_SESSION['user_id'])) {
+//     header('Location: ?page=home');
+//     exit;
+// }
 ?>
 
 <!DOCTYPE html>
@@ -134,6 +134,7 @@ if (in_array($page, ['login', 'signup'], true)
     <?php endif; ?>
 
     <!-- my javascript -->
+    
     <?php if ($page === 'login'): ?>
         <script src="js/login.js"></script>
     <?php elseif ($page === 'signup'): ?>
