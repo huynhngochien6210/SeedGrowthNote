@@ -4,8 +4,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const $ = (id) => document.getElementById(id);
   const panel = $('aiPanel'), toggle = $('aiToggle'), close = $('aiClose');
   const input = $('aiInput'), send = $('aiSend');
-  const chat = panel?.querySelector('.ai-chat');
-  if (!panel || !toggle || !input || !send || !chat) return;
+  if (!panel || !toggle || !input || !send) return;
+
+  let chat = panel.querySelector('.ai-chat');
+
+  if (!chat) {
+      chat = document.createElement('div');
+      chat.className = 'ai-chat';
+      chat.style.flex = '1';
+      chat.style.overflowY = 'auto';
+      chat.style.minHeight = '0';
+
+      const composer = input.closest('form')
+          || input.parentElement;
+
+      if (composer && panel.contains(composer)) {
+          panel.insertBefore(chat, composer);
+      } else {
+          panel.appendChild(chat);
+      }
+  }
+ 
   const csrf = document.querySelector('meta[name="sgn-csrf"]')?.content || '';
   let busy = false;
   const say = (message, cls = 'ai-message') => {
@@ -29,13 +48,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!res.ok || !data.success) throw new Error(data.message || `HTTP ${res.status}`);
     return data;
   }
+  function getCurrentNoteId() {
+    return window.SeedGrowthNoteCurrentNoteId || null;
+  }
   async function sendQuestion() {
     if (busy) return;
     const question = input.value.trim(); if (!question) return;
     busy = true; send.disabled = true; input.value = '';
     say(question, 'user-message'); const reply = say('Đang tìm trong các ghi chú được phép đọc...');
     try {
-      const data = await callApi('ask.php', {question});
+      const noteId = getCurrentNoteId();
+
+      const data = await callApi('ask.php', {
+          question,
+          ...(noteId ? { note_id: Number(noteId) } : {})
+      });
+      
       reply.textContent = data.answer;
       for (const ref of data.citations || []) {
         const citation = document.createElement('div'); citation.className = 'sgn-ai-citation';

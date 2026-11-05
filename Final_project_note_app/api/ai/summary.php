@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__.'/_common.php';
-require_once __DIR__.'/_gemini.php';
+require_once __DIR__.'/_groq.php';
 $userId=aiUser();$body=aiBody();$id=(int)($body['note_id']??0);
 if($id<1) aiOut(['success'=>false,'message'=>'note_id không hợp lệ'],400);
 $note=aiNote($pdo,$id,$userId);
